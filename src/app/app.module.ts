@@ -8,8 +8,6 @@ import { AuthGuard } from './_guards/auth-guard.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { NavigationComponent } from './navigation/navigation.component';
 
 import firebase from '@firebase/app';
 import '@firebase/auth'
@@ -19,9 +17,7 @@ firebase.initializeApp(environment.firebaseConfig);
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    HomeComponent,
-    NavigationComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,

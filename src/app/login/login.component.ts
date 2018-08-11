@@ -16,7 +16,9 @@ export class LoginComponent implements OnInit {
   keepSignedIn: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {
-    if (this.authService.isAuthenticated()) this.router.navigate(['']);
+    authService.isAuthenticatedPromise().then(() => {
+      this.router.navigate(['staff']);
+    })
   }
 
   ngOnInit() {
@@ -31,7 +33,7 @@ export class LoginComponent implements OnInit {
       
     this.authService.getAuth().setPersistence(session).then(() => {
       this.authService.signIn(this.email, this.password).then(() => {
-        this.router.navigate(['']);
+        this.router.navigate(['staff']);
       }).catch((err) => {
         this.showLoading = false;
         if (err.code == "auth/wrong-password") {

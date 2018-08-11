@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../_services/auth/auth.service';
+import { AuthService } from '../../_services/auth/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -14,7 +14,7 @@ export class NavigationComponent {
 
   logout() {
     this.authService.auth.signOut().then((data) => {
-      this.router.navigate(['login']);
+      this.router.navigate(['']);
     }).catch((err) => {
       // Todo: Indicate to user that signout was unsuccessful
     }); 

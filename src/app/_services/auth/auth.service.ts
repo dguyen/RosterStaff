@@ -21,8 +21,20 @@ export class AuthService {
     return this.auth.signOut();
   }
 
-  isAuthenticated(){
+  isAuthenticated() {
     return this.auth.currentUser ? true : false;
+  }
+
+  isAuthenticatedPromise() {
+    return new Promise((resolve, reject) => {
+      this.auth.onAuthStateChanged((user) => {
+        if (user || this.isAuthenticated()) {
+          resolve(true);
+          return;
+        }
+        resolve(false);
+      })
+    })
   }
 
   getAuth() {
