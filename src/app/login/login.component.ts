@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../_services/auth/auth.service';
@@ -7,7 +7,7 @@ import firebase from '@firebase/app';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
   email: string = "";
@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     this.showLoading = true;
-    
+
     let session = this.keepSignedIn ? 
       firebase.auth.Auth.Persistence.LOCAL : 
       firebase.auth.Auth.Persistence.SESSION;

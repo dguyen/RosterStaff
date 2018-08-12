@@ -1,19 +1,17 @@
 <div class="container">
-  <div id="someContainer">
-    <form>
-      <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" name="email" [(ngModel)]="email">
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password" [(ngModel)]="password">
-      </div>
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" name="keepSignedIn" [(ngModel)]="keepSignedIn">
-        <label class="form-check-label" for="exampleCheck1">Keep me signed in</label>
-      </div>
-      <button type="submit" class="btn btn-primary" (click)="login()">Submit</button>
-    </form>
+  <div id="loginContainer">
+    <mat-form-field>
+      <input type="email" matInput placeholder="Email" [(ngModel)]="email">
+    </mat-form-field>
+    
+    <mat-form-field>
+      <input type="password" matInput placeholder="Password" [(ngModel)]="password">
+    </mat-form-field>
+  
+    <mat-checkbox id="checkbox" [(ngModel)]="keepSignedIn">Keep me signed in</mat-checkbox>
+    <button id="loginButton" mat-flat-button color="primary" (click)="login()">
+      Login
+      <mat-spinner id="spinner" mode="indeterminate" diameter=20 color="accent" *ngIf="showLoading"></mat-spinner>
+    </button>
   </div>
 </div>
