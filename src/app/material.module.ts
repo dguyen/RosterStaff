@@ -1,7 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Angular material components
 import { 
@@ -15,8 +12,11 @@ import {
     MatInputModule, 
     MatFormFieldModule,
     MatCheckboxModule,
-} from '@angular/material';
+    MatTabsModule,
+    MatSidenavModule,
+    MatListModule
 
+} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -24,10 +24,6 @@ import {
   imports: [
   ],
   exports: [
-    BrowserModule,
-    FormsModule,
-    BrowserAnimationsModule,
-
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatButtonModule,
@@ -38,7 +34,10 @@ import {
     MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTabsModule,
+    MatSidenavModule,
+    MatListModule
   ],
 })
-export class SharedModule { }
+export class MaterialModule { }

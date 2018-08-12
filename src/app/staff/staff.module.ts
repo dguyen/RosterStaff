@@ -5,10 +5,13 @@ import { StaffRoutingModule } from './staff-routing.module';
 import { HomeComponent } from './home/home.component';
 import { NavigationComponent } from './navigation/navigation.component';
 
+import { MaterialModule } from '../material.module';
+
 @NgModule({
   imports: [
     CommonModule,
-    StaffRoutingModule
+    StaffRoutingModule,
+    MaterialModule
   ],
   declarations: [HomeComponent, NavigationComponent]
 })

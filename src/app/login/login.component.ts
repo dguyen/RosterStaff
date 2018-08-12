@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
   password: string = "";
   showLoading: boolean = false;
   keepSignedIn: boolean = false;
-
+  
   constructor(private authService: AuthService, private router: Router) {
     authService.isAuthenticatedPromise().then(() => {
       this.router.navigate(['staff']);

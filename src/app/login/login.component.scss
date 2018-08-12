@@ -1,29 +1,66 @@
 #loginContainer {
     width: 25rem;
-    margin-top: 15em;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid rgb(53, 76, 119);
-    border-radius: 0.5rem;
+    margin: 10em auto 0 auto;
     padding: 2rem;
+    background-color: rgb(255, 255, 255);
     
-    #checkbox {
-        margin-top: 1rem;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+
+    // Stop Chrome's yelow autofill color from appearing
+    input:-webkit-autofill {
+        box-shadow: 0 0 0 30px white inset;
+        -webkit-box-shadow: 0 0 0 30px white inset;
     }
 
-    #loginButton {
-        width: 100%;
-        font-size: 1.1em;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        margin-top: 1rem;
-        margin-bottom: 1rem;
+    #logo {
+        margin: auto;
+        img {
+            width: 128px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    
+    #title {
+        text-align: center;
+        margin: 0.25em 0 1em 0;
+    }
 
-        #spinner {
-            display: inline-block;
-            top: 1rem;
-            position: absolute;
-            margin-left: 1rem;
+    #formContainer {
+        width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+
+        #checkbox {
+            margin-top: 1rem;
+            margin-left: 5%;
+        }
+    
+        #loginButton {
+            width: 100%;
+            font-size: 1.1em;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            margin: 1rem auto 1rem auto;
+            border-radius: 1em;
+            width: 90%;
+            outline: none;
+
+            #spinner {
+                display: inline-block;
+                top: 1rem;
+                position: absolute;
+                margin-left: 1rem;
+            }
+        }
+        
+        #forgotPassword {
+            text-decoration: underline;
+            text-align: center;
+            color: #006ce5;
+            font-weight: 100;
         }
     }
 
