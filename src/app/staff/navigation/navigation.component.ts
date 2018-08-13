@@ -10,6 +10,7 @@ import { AuthService } from '../../_services/auth/auth.service';
 })
 export class NavigationComponent {
   opened: boolean = true;
+  numBadge: number = 2;
 
   constructor(private router: Router, private authService: AuthService) { }
 

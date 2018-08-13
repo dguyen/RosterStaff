@@ -72,6 +72,10 @@ $nav-item-pressed: #302f2f;
                 }
             }
 
+            mat-chip {
+                margin-left: 9.5em;
+            }
+
             .selectedItem {
                 background-color: $nav-item-pressed;
                 -webkit-box-shadow: inset 0px 0px 2px 2px rgb(48, 44, 44);

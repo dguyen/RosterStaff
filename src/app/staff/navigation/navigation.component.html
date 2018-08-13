@@ -2,7 +2,14 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon id="menu" matBadge="22" matBadgeColor="accent" matBadgePosition="above after" color="black">menu</mat-icon>
+        <mat-icon id="menu" 
+                  matBadge="{{ numBadge }}"
+                  matBadgeColor="accent" 
+                  matBadgePosition="above after" 
+                  color="black"
+                  [matBadgeHidden]="numBadge == 0">        
+          menu
+        </mat-icon>
       </button>
 
       <div id="toolbarProfile" *ngIf="!opened">
@@ -27,6 +34,10 @@
       </a>
       <a mat-list-item>
         <mat-icon class="listIcon">receipt</mat-icon>Shifts
+        <mat-chip-list>
+          <mat-chip color="accent" selected>   {{ numBadge }}   </mat-chip>
+        </mat-chip-list>
+
       </a>
       <a mat-list-item>
         <mat-icon class="listIcon">account_circle</mat-icon>Profile
