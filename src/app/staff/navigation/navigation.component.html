@@ -1,22 +1,47 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="#">Navbar | Status: {{ authService.isAuthenticated() }}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarText">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Some tab</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Some tab</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" (click)="logout()">Logout</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<mat-sidenav-container class="navContainer">
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon id="menu" matBadge="22" matBadgeColor="accent" matBadgePosition="above after" color="black">menu</mat-icon>
+      </button>
+
+      <div id="toolbarProfile" *ngIf="!opened">
+        <button mat-icon-button>
+          <mat-icon id="menu" >{{ getProfilePicture() }}</mat-icon>
+          <span>{{ getName() }}</span>
+        </button>
+      </div>
+    </mat-toolbar>
+  </mat-sidenav-content>
+  
+  <mat-sidenav class="sideNav" #sidenav mode="side" [(opened)]="opened">
+
+    <mat-nav-list class="navContent">
+      <div class="sideNavHeader">
+        <h3 color="primary">Company</h3>
+        <mat-divider class="divider"></mat-divider>
+      </div>
+
+      <a mat-list-item class="selectedItem">
+        <mat-icon class="listIcon">home</mat-icon>Dashboard
+      </a>
+      <a mat-list-item>
+        <mat-icon class="listIcon">receipt</mat-icon>Shifts
+      </a>
+      <a mat-list-item>
+        <mat-icon class="listIcon">account_circle</mat-icon>Profile
+      </a>
+      <a mat-list-item (click)="logout()">
+        <mat-icon class="listIcon">subdirectory_arrow_left</mat-icon>Logout
+      </a>
+
+      <div class="sideNavFooter">
+        <mat-divider class="divider"></mat-divider>
+        <a mat-list-item>
+          <mat-icon>{{ getProfilePicture() }}</mat-icon>
+          {{ getName() }}
+        </a>        
+      </div>    
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container>

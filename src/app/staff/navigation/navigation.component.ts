@@ -9,6 +9,7 @@ import { AuthService } from '../../_services/auth/auth.service';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent {
+  opened: boolean = true;
 
   constructor(private router: Router, private authService: AuthService) { }
 
@@ -18,5 +19,19 @@ export class NavigationComponent {
     }).catch((err) => {
       // Todo: Indicate to user that signout was unsuccessful
     }); 
+  }
+
+  getProfilePicture() {
+    let image = null;
+    // try get from database
+    
+    return image ? image : "account_circle";
+  }
+
+  getName() {
+    let name = null;
+    // try get name from database
+
+    return name ? name : "Please setup name";
   }
 }
