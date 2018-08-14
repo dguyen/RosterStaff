@@ -7,10 +7,10 @@ const routes: Routes = [
   {
     path: 'staff',
     loadChildren: './staff/staff.module#StaffModule'
-  }, 
-  { 
-    path: '', 
-    component: LoginComponent 
+  },
+  {
+    path: '',
+    component: LoginComponent
   },
   // { path: '**', redirectTo: '' }
 ];

@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 
 // Angular material components
-import { 
+import {
     MatProgressSpinnerModule,
-    MatButtonModule, 
-    MatCardModule, 
-    MatMenuModule, 
-    MatToolbarModule, 
-    MatIconModule, 
-    MatAutocompleteModule, 
-    MatInputModule, 
+    MatButtonModule,
+    MatCardModule,
+    MatMenuModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatInputModule,
     MatFormFieldModule,
     MatCheckboxModule,
     MatTabsModule,

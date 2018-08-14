@@ -3,15 +3,14 @@
     <mat-toolbar color="primary" class="toolbar">
       <button mat-icon-button (click)="sidenav.toggle()">
         <mat-icon id="menu" 
-                  matBadge="{{ numBadge }}"
+                  matBadge="{{ menuService.getTotalNotifications() }}"
                   matBadgeColor="accent" 
                   matBadgePosition="above after" 
                   color="black"
-                  [matBadgeHidden]="numBadge == 0">        
+                  [matBadgeHidden]="numBadge == 0 || opened">        
           menu
         </mat-icon>
       </button>
-
       <div id="toolbarProfile" *ngIf="!opened">
         <button mat-icon-button>
           <mat-icon id="menu" >{{ getProfilePicture() }}</mat-icon>
@@ -19,36 +18,36 @@
         </button>
       </div>
     </mat-toolbar>
+
+    <div id="pageContent">
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
   
   <mat-sidenav class="sideNav" #sidenav mode="side" [(opened)]="opened">
-
     <mat-nav-list class="navContent">
       <div class="sideNavHeader">
-        <h3 color="primary">Company</h3>
+        <h3 color="primary">{{ companyName }}</h3>
         <mat-divider class="divider"></mat-divider>
       </div>
 
-      <a mat-list-item class="selectedItem">
-        <mat-icon class="listIcon">home</mat-icon>Dashboard
-      </a>
-      <a mat-list-item>
-        <mat-icon class="listIcon">receipt</mat-icon>Shifts
-        <mat-chip-list>
-          <mat-chip color="accent" selected>   {{ numBadge }}   </mat-chip>
+      <a mat-list-item class="sideNavItem"
+          *ngFor="let menu of menuItems; index as i"
+          [routerLink]=[menu.routerLink]
+          routerLinkActive="selectedItem">
+        <mat-icon>{{ menu.icon }}</mat-icon>{{ menu.name }}
+        <mat-chip-list *ngIf="menu.hasBadge && menu.badgeNum != 0">
+          <mat-chip color="accent" selected>{{ menu.badgeNum }}</mat-chip>
         </mat-chip-list>
+      </a>
 
-      </a>
-      <a mat-list-item>
-        <mat-icon class="listIcon">account_circle</mat-icon>Profile
-      </a>
-      <a mat-list-item (click)="logout()">
-        <mat-icon class="listIcon">subdirectory_arrow_left</mat-icon>Logout
+      <a mat-list-item class="sideNavItem" (click)="authService.signOut()">
+        <mat-icon>subdirectory_arrow_left</mat-icon>Logout
       </a>
 
       <div class="sideNavFooter">
         <mat-divider class="divider"></mat-divider>
-        <a mat-list-item>
+        <a mat-list-item  (click)="test()">
           <mat-icon>{{ getProfilePicture() }}</mat-icon>
           {{ getName() }}
         </a>        

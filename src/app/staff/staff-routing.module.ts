@@ -1,16 +1,33 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-
 import { AuthGuard } from '../_guards/auth-guard.service';
 
+import { StaffPortalComponent } from './staff-portal/staff-portal.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ShiftsComponent } from './shifts/shifts.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
 const routes: Routes = [
-  { 
-    path: '', 
-    component: HomeComponent,
+  {
+    path: '',
+    component: StaffPortalComponent,
     canActivate: [ AuthGuard ],
-    canActivateChild: [ AuthGuard ]
+    canActivateChild: [ AuthGuard ],
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+      },
+      {
+        path: 'shifts',
+        component: ShiftsComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+      },
+    ]
   }
 ];
 

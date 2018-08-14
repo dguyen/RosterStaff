@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 
 $accent: #6bcace;
-$gray-accent: #efefef;
+$gray-text-accent: #efefef;
 $side-nav: #444040;
 $nav-item-pressed: #302f2f;
 
@@ -11,6 +11,11 @@ $nav-item-pressed: #302f2f;
     width: $size;
     line-height: $size;
 }  
+
+#pageContent {
+    width: 100%;
+    overflow: hidden;
+}
 
 .navContainer {
     display: flex;
@@ -53,8 +58,7 @@ $nav-item-pressed: #302f2f;
         align-items: center;
         justify-content: center;
         width: 250px;
-        background-color: #444040;
-        color: $gray-accent;
+        background-color: $side-nav;
 
         .navContent {
             width: 100%;
@@ -72,8 +76,16 @@ $nav-item-pressed: #302f2f;
                 }
             }
 
-            mat-chip {
-                margin-left: 9.5em;
+            .sideNavItem {
+                color: $gray-text-accent;
+
+                mat-chip {
+                    margin-left: 9.5em;
+                }
+
+                mat-icon {
+                    margin-right: 0.25em;
+                }
             }
 
             .selectedItem {
@@ -89,6 +101,7 @@ $nav-item-pressed: #302f2f;
                 left: 0;
                 width: 100%;
                 padding-bottom: 5%;
+                color: $gray-text-accent;
 
                 a {
                     margin: auto;
@@ -103,10 +116,6 @@ $nav-item-pressed: #302f2f;
                     @include md-icon-size(42px);
                     margin-right: 0.2em;
                 }
-            }
-
-            .listIcon {
-                margin-right: 0.25em;
             }
         }
     }
