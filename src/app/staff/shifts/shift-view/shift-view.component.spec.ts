@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TabMenuComponent } from './tab-menu.component';
+import { ShiftViewComponent } from './shift-view.component';
 
-describe('TabMenuComponent', () => {
-  let component: TabMenuComponent;
-  let fixture: ComponentFixture<TabMenuComponent>;
+describe('ShiftViewComponent', () => {
+  let component: ShiftViewComponent;
+  let fixture: ComponentFixture<ShiftViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TabMenuComponent ]
+      declarations: [ ShiftViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TabMenuComponent);
+    fixture = TestBed.createComponent(ShiftViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

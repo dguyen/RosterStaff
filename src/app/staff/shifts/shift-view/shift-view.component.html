@@ -1,0 +1,8 @@
+<button mat-icon-button id="toggleView" (click)="showList = !showList">
+  <mat-icon *ngIf="!showList">view_list</mat-icon>
+  <mat-icon *ngIf="showList">calendar_today</mat-icon>
+</button>
+<div id="content">
+  <app-list *ngIf="showList"></app-list>
+  <app-calendar *ngIf="!showList"></app-calendar>
+</div>
