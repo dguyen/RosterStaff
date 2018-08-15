@@ -1,10 +1,10 @@
-<div class="container">
-  <div id="loginContainer">
+<div class="row" id="page">
+  <div id="loginContainer" class="align-self-center">
     <div id="logo">
       <img src="assets/svg/logo.svg">
     </div>
     <h4 id="title">Roster.Me</h4>
-
+    
     <div id="formContainer">
       <mat-form-field>
         <input type="email" matInput placeholder="Email" [(ngModel)]="email">
@@ -13,9 +13,9 @@
       <mat-form-field>
         <input type="password" matInput placeholder="Password" [(ngModel)]="password" (keyup.enter)="login()">
       </mat-form-field>
-    
+      
       <mat-checkbox id="checkbox" [(ngModel)]="keepSignedIn">Keep me signed in</mat-checkbox>
-
+      
       <button id="loginButton" mat-flat-button color="primary" (click)="login()">
         Login
         <mat-spinner id="spinner" mode="indeterminate" diameter=20 color="accent" *ngIf="showLoading"></mat-spinner>
@@ -25,4 +25,3 @@
     </div>
   </div>
 </div>
-
