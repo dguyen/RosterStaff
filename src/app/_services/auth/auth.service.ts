@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import firebase from '@firebase/app';
-import '@firebase/auth'
+import '@firebase/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class AuthService {
     return this.auth.signInWithEmailAndPassword(email, password);
   }
 
-  signOut(){
+  signOut() {
     return this.auth.signOut();
   }
 
@@ -33,11 +33,15 @@ export class AuthService {
           return;
         }
         resolve(false);
-      })
-    })
+      });
+    });
   }
 
   getAuth() {
     return this.auth;
+  }
+
+  resetEmail(email: string) {
+    return this.auth.sendPasswordResetEmail(email);
   }
 }

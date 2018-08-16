@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { environment } from '../environments/environment';
@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthGuard } from './_guards/auth-guard.service'; 
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent, ForgotPasswordComponent } from './login/login.component';
 
 import { MaterialModule } from './material.module';
 
@@ -19,7 +19,8 @@ firebase.initializeApp(environment.firebaseConfig);
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -27,8 +28,10 @@ firebase.initializeApp(environment.firebaseConfig);
     BrowserAnimationsModule,
     MaterialModule,
     AppRoutingModule,
+    ReactiveFormsModule
   ],
+  entryComponents: [ ForgotPasswordComponent ],
   providers: [ AuthGuard ],
-  bootstrap: [AppComponent]
+  bootstrap: [ AppComponent ]
 })
 export class AppModule { }

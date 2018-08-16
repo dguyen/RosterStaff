@@ -7,21 +7,24 @@
     
     <div id="formContainer">
       <mat-form-field>
-        <input type="email" matInput placeholder="Email" [(ngModel)]="email">
+        <input type="email" matInput placeholder="Email" spellcheck=false [(ngModel)]="email" (keyup.enter)="login()">
+        <p class="errorMsg">{{ errorMsg.email }}</p>
       </mat-form-field>
-      
+            
       <mat-form-field>
         <input type="password" matInput placeholder="Password" [(ngModel)]="password" (keyup.enter)="login()">
+        <p class="errorMsg">{{ errorMsg.pass }}</p>
       </mat-form-field>
-      
+
       <mat-checkbox id="checkbox" [(ngModel)]="keepSignedIn">Keep me signed in</mat-checkbox>
-      
-      <button id="loginButton" mat-flat-button color="primary" (click)="login()">
+
+      <p class="errorMsg">{{ errorMsg.unknown }}</p>
+      <button id="loginButton" mat-flat-button color="primary" (click)="login()" [disabled]="showLoading">
         Login
         <mat-spinner id="spinner" mode="indeterminate" diameter=20 color="accent" *ngIf="showLoading"></mat-spinner>
       </button>
       
-      <p id="forgotPassword">Forgot password</p>
+      <p id="forgotPassword" (click)="openResetPass()">Forgot password</p>
     </div>
   </div>
 </div>
