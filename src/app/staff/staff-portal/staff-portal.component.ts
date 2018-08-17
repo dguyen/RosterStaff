@@ -19,8 +19,7 @@ export class StaffPortalComponent {
 
   constructor(private router: Router, private authService: AuthService) {
     this.menuService.setBadge('Shifts', this.numBadge);
-    // this.router.navigate(['staff/' + this.menuItems[0].routerLink]);
-    this.router.navigate(['staff/shifts']);
+    this.router.navigate([router.url]);
   }
 
   logout() {

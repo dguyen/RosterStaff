@@ -1,3 +1,92 @@
-<p>
-  profile works!
-</p>
+<mat-card id="basicInfo">
+  <mat-card-title>Basic Info</mat-card-title>
+  <mat-card-content>
+
+    <form id="basicInfoForm">
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="First Name">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Last Name">
+          </mat-form-field>
+        </div>
+        
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Date of birth">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Address">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="City">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="State">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field>
+            <input matInput placeholder="Postal Code">
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions style="height: 3em">
+    <button mat-flat-button id="saveButton" color="accent">Save</button>
+    <button mat-stroked-button id="cancelButton" color="accent">Cancel</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card id="securityCard">
+  <mat-card-title>Security</mat-card-title>
+  <mat-card-content>
+    <form id="confirmPasswordForm">
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="password" placeholder="Current password">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="password" placeholder="New password">
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field>
+            <input matInput type="password" placeholder="Confirm password">
+          </mat-form-field>
+        </div>        
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions style="height: 3em">
+    <button mat-flat-button id="saveButton" color="accent">Save</button>
+  </mat-card-actions>
+</mat-card>
