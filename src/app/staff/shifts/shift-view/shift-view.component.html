@@ -3,6 +3,6 @@
   <mat-icon *ngIf="showList">calendar_today</mat-icon>
 </button>
 <div id="content">
-  <app-list *ngIf="showList"></app-list>
-  <app-calendar *ngIf="!showList"></app-calendar>
+  <app-list *ngIf="showList" [shiftData]='data'></app-list>
+  <app-calendar *ngIf="!showList" [shiftData]='data'></app-calendar>
 </div>

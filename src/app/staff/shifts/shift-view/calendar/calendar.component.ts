@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-calendar',
@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
+  @Input() shiftData;
 
   constructor() { }
 
   ngOnInit() {
+    // Data passed from parent into here to be displayed
+    console.log(this.shiftData);
   }
 
 }
