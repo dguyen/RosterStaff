@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-shift-view',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shift-view.component.scss']
 })
 export class ShiftViewComponent implements OnInit {
+  @Input() data;
   showList = true;
 
   constructor() { }

@@ -1,14 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
-const Job_list: AvailableJobs[] = [
-  {Location: 'Mount Waverley', Start: 1400, End: 1600, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-  {Location: 'Glen Waverley', Start: 1600, End: 2200, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-  {Location: 'Ashwood', Start: 1500, End: 2000, Duration: 500, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-  {Location: 'Clayton', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-  {Location: 'Slamtown Downtown', Start: 2000, End: 2200, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-
-
-];
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-list',
@@ -16,14 +7,31 @@ const Job_list: AvailableJobs[] = [
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  @Input() shiftData: any[];
 
-  displayedColumns: string[] = ['Location', 'Start', 'End', 'Duration', 'Note', 'Replacement', 'On_Duty'];
-  columnsToDisplay: string[] = this.displayedColumns;
-  dataSource = Job_list;
-  constructor() { }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  columnsToDisplay: string[] = [];
+  dataSource: MatTableDataSource<any>;
+
+  constructor() {}
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource(this.shiftData);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
+    if (this.shiftData.length > 0) {
+      this.columnsToDisplay = Object.keys(this.shiftData[0]);
+    }
   }
 
-}
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
 
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+}
