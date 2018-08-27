@@ -1,9 +1,15 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { UserService } from '../_services/user/user.service';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
-import { AuthService } from '../_services/auth/auth.service';
-import firebase from '@firebase/app';
+class ErrorMessage {
+  email = '';
+  pass = '';
+  unknown = '';
+}
 
 @Component({
   selector: 'app-login',
@@ -15,44 +21,58 @@ export class LoginComponent implements OnInit {
   password = '';
   showLoading = false;
   keepSignedIn = false;
-  errorMsg = {
-    email: '',
-    pass: '',
-    unknown: ''
-  };
+  errorMsg = new ErrorMessage;
 
   constructor(
-    private authService: AuthService,
+    private fireAuth: AngularFireAuth,
+    private userService: UserService,
     private router: Router,
     private dialog: MatDialog
   ) {
-    authService.isAuthenticatedPromise().then(() => {
-      this.router.navigate(['staff']);
+    this.fireAuth.auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.routeUser();
+      }
     });
   }
 
   ngOnInit() {
   }
 
-  resetErrorMsg() {
-    this.errorMsg = {
-      email: '',
-      pass: '',
-      unknown: ''
-    };
+  routeUser() {
+    if (!this.fireAuth.auth.currentUser) {
+      return;
+    }
+
+    // TODO: Select organisation
+    // if (this.userService.org.listOfOrgs.length > 1) {
+    //   console.log('Select your organisation');
+    // }
+
+    // TODO: User selects organisation [HARDCODED crystal-palace]
+    // const selectedOrg = 'crystal-palace';
+    // this.userService.loadUserData(selectedOrg);
+
+    // Get roles
+    this.userService.getRoles().then((roles: string[]) => {
+      if (roles.length > 1) {
+        console.log('Select which portal');
+      } else {
+        console.log('Navigating to: ' + roles[0].toLowerCase());
+        this.router.navigate([roles[0].toLowerCase()]);
+      }
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 
   login() {
-    this.resetErrorMsg();
+    this.errorMsg = new ErrorMessage;
     this.showLoading = true;
-    const session = this.keepSignedIn ?
-      firebase.auth.Auth.Persistence.LOCAL :
-      firebase.auth.Auth.Persistence.SESSION;
+    const session = this.keepSignedIn ? 'local' : 'session';
 
-    this.authService.getAuth().setPersistence(session).then(() => {
-      this.authService.signIn(this.email, this.password).then(() => {
-        this.router.navigate(['staff']); // Todo: Differentiate between staff and admin
-      }).catch((err) => {
+    this.fireAuth.auth.setPersistence(session).then(() => {
+      this.fireAuth.auth.signInWithEmailAndPassword(this.email, this.password).catch((err) => {
         this.showLoading = false;
         if (err.code === 'auth/wrong-password') {
           this.errorMsg.pass = 'Wrong password.';
@@ -75,80 +95,5 @@ export class LoginComponent implements OnInit {
       width: '22em',
       data: {email: this.email }
     });
-  }
-}
-
-@Component({
-  selector: 'app-forgot-password',
-  template: `
-    <mat-spinner
-      mode="indeterminate"
-      diameter=20
-      color="accent"
-      *ngIf="showLoading"
-      style="float: right;">
-    </mat-spinner>
-
-    <h2 mat-dialog-title>Reset Password</h2>
-    <div *ngIf="!emailSent">
-      <mat-dialog-content>
-        <mat-form-field style="width: 100%">
-          <input matInput [(ngModel)]="email" spellcheck=false (keyup.enter)="sendReset()" placeholder="Email">
-        </mat-form-field>
-        <p style="color: red; font-size: 0.8em; margin: 0; height: 1.5em">{{ message }}</p>
-      </mat-dialog-content>
-
-      <mat-dialog-actions style="float:right">
-        <button mat-button mat-dialog-close>Cancel</button>
-        <button mat-button color="accent" (click)="sendReset()" [disabled]="showLoading">Send</button>
-      </mat-dialog-actions>
-    </div>
-
-    <div *ngIf="emailSent">
-      <mat-dialog-content>
-        <p>Email sent successfully</p>
-      </mat-dialog-content>
-      <mat-dialog-actions style="float:right">
-      <button mat-button mat-dialog-close>Okay</button>
-      </mat-dialog-actions>
-    </div>
-  `
-})
-export class ForgotPasswordComponent {
-  showLoading = false;
-  emailSent = false;
-  email = '';
-  message = '';
-
-  constructor(
-    public dialogRef: MatDialogRef<ForgotPasswordComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    if (data.email) {
-      this.email = data.email;
-    }
-  }
-
-  sendReset() {
-    this.emailSent = false;
-    this.showLoading = true;
-    this.message = '';
-    firebase.auth().sendPasswordResetEmail(this.email).then(() => {
-      this.showLoading = false;
-      this.emailSent = true;
-    }).catch((err) => {
-      this.showLoading = false;
-      if (err.code === 'auth/invalid-email' || err.code === 'auth/argument-error') {
-        this.message = 'Email is invalid. Please check email and try again.';
-      } else if (err.code === 'auth/user-not-found') {
-        this.message = 'Email was not found in the system';
-      } else {
-        this.message = 'Something went wrong. Please try again later.';
-      }
-    });
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 }

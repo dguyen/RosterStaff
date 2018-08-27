@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../../_services/auth/auth.service';
 import { MenuService } from '../../_services/menu/menu.service';
 import { StaffMenuItems } from './staff-portal-menu-items';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { UserService } from '../../_services/user/user.service';
 
 @Component({
   selector: 'app-staff-portal',
@@ -17,13 +18,13 @@ export class StaffPortalComponent {
   companyName = 'Company';
   numBadge = 5;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private fireAuth: AngularFireAuth, private userService: UserService) {
     this.menuService.setBadge('Shifts', this.numBadge);
     this.router.navigate([router.url]);
   }
 
   logout() {
-    this.authService.auth.signOut().then((data) => {
+    this.fireAuth.auth.signOut().then((data) => {
       this.router.navigate(['']);
     }).catch((err) => {
       // Todo: Indicate to user that signout was unsuccessful
@@ -31,16 +32,13 @@ export class StaffPortalComponent {
   }
 
   getProfilePicture() {
-    let image = null;
+    const image = null;
     // try get from database
 
     return image ? image : 'account_circle';
   }
 
   getName() {
-    let name = null;
-    // try get name from database
-
-    return name ? name : 'Please setup name';
+    return this.userService.getFullName();
   }
 }

@@ -25,7 +25,7 @@
   <mat-sidenav class="sideNav" #sidenav mode="side" [(opened)]="opened">
     <mat-nav-list class="navContent">
       <div class="sideNavHeader">
-        <h3 color="primary">{{ companyName }}</h3>
+        <h3 color="primary">{{ userService.org.selectedOrg }}</h3>
         <mat-divider class="divider"></mat-divider>
       </div>
 
@@ -39,7 +39,7 @@
         </mat-chip-list>
       </a>
 
-      <a mat-list-item class="sideNavItem" (click)="authService.signOut()">
+      <a mat-list-item class="sideNavItem" (click)="fireAuth.auth.signOut()">
         <mat-icon>subdirectory_arrow_left</mat-icon>Logout
       </a>
 

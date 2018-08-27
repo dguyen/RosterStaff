@@ -5,17 +5,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
-import { AuthGuard } from './_guards/auth-guard.service'; 
 
 import { AppComponent } from './app.component';
-import { LoginComponent, ForgotPasswordComponent } from './login/login.component';
+import { LoginComponent } from './login/login.component';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 
 import { MaterialModule } from './material.module';
 
-import firebase from '@firebase/app';
-import '@firebase/auth';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
-firebase.initializeApp(environment.firebaseConfig);
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,13 +25,16 @@ firebase.initializeApp(environment.firebaseConfig);
   imports: [
     BrowserModule,
     FormsModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
     BrowserAnimationsModule,
     MaterialModule,
     AppRoutingModule,
     ReactiveFormsModule
   ],
   entryComponents: [ ForgotPasswordComponent ],
-  providers: [ AuthGuard ],
+  providers: [ ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

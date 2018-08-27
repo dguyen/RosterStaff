@@ -9,10 +9,14 @@ const routes: Routes = [
     loadChildren: './staff/staff.module#StaffModule'
   },
   {
+    path: 'admin',
+    loadChildren: './admin/admin.module#AdminModule'
+  },
+  {
     path: '',
     component: LoginComponent
   },
-  // { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({

@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthGuard } from '../_guards/auth-guard.service';
+import { AuthGuard } from '../_guards/auth.guard';
+import { RoleGuard } from '../_guards/role.guard';
 
 import { StaffPortalComponent } from './staff-portal/staff-portal.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -12,8 +13,9 @@ const routes: Routes = [
   {
     path: '',
     component: StaffPortalComponent,
-    canActivate: [ AuthGuard ],
-    canActivateChild: [ AuthGuard ],
+    canActivate: [ AuthGuard, RoleGuard ],
+    canActivateChild: [ AuthGuard, RoleGuard ],
+    data: { roles: ['STAFF'] },
     children: [
       {
         path: 'dashboard',
