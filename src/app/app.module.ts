@@ -15,12 +15,16 @@ import { MaterialModule } from './material.module';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { SelectOrganisationComponent } from './login/select-organisation/select-organisation.component';
+import { SelectPortalComponent } from './login/select-portal/select-portal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    SelectOrganisationComponent,
+    SelectPortalComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
     AppRoutingModule,
     ReactiveFormsModule
   ],
-  entryComponents: [ ForgotPasswordComponent ],
+  entryComponents: [ ForgotPasswordComponent, SelectOrganisationComponent, SelectPortalComponent ],
   providers: [ ],
   bootstrap: [ AppComponent ]
 })

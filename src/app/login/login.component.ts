@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserService } from '../_services/user/user.service';
+
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { SelectOrganisationComponent } from './select-organisation/select-organisation.component';
+import { SelectPortalComponent } from './select-portal/select-portal.component';
 
 class ErrorMessage {
   email = '';
@@ -16,7 +20,7 @@ class ErrorMessage {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   email = '';
   password = '';
   showLoading = false;
@@ -29,36 +33,32 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog
   ) {
-    this.fireAuth.auth.onAuthStateChanged((user) => {
+    const unsubscribe = this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.routeUser();
       }
+      unsubscribe();
     });
   }
 
-  ngOnInit() {
-  }
-
+  /**
+   * Route the user to the correct portal
+   */
   routeUser() {
     if (!this.fireAuth.auth.currentUser) {
       return;
     }
 
-    // TODO: Select organisation
-    // if (this.userService.org.listOfOrgs.length > 1) {
-    //   console.log('Select your organisation');
-    // }
-
-    // TODO: User selects organisation [HARDCODED crystal-palace]
-    // const selectedOrg = 'crystal-palace';
-    // this.userService.loadUserData(selectedOrg);
+    // Select organisation
+    // this.selectOrganisation(this.userService.org.listOfOrgs).subscribe(result => {
+    //   console.log(result);
+    // });
 
     // Get roles
     this.userService.getRoles().then((roles: string[]) => {
       if (roles.length > 1) {
-        console.log('Select which portal');
+        this.selectPortal(roles);
       } else {
-        console.log('Navigating to: ' + roles[0].toLowerCase());
         this.router.navigate([roles[0].toLowerCase()]);
       }
     }).catch((err) => {
@@ -66,13 +66,18 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Log in the user
+   */
   login() {
     this.errorMsg = new ErrorMessage;
     this.showLoading = true;
     const session = this.keepSignedIn ? 'local' : 'session';
 
     this.fireAuth.auth.setPersistence(session).then(() => {
-      this.fireAuth.auth.signInWithEmailAndPassword(this.email, this.password).catch((err) => {
+      this.fireAuth.auth.signInWithEmailAndPassword(this.email, this.password).then(() => {
+        this.routeUser();
+      }).catch((err) => {
         this.showLoading = false;
         if (err.code === 'auth/wrong-password') {
           this.errorMsg.pass = 'Wrong password.';
@@ -90,10 +95,57 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  /**
+   * Allows the user to select which organisation's portal view
+   * @param organisations array of organisations the user can select from
+   */
+  selectOrganisation(organisations: Array<string>) {
+    if (organisations.length === 1) {
+      this.userService.loadUserData(organisations[0]);
+      return;
+    }
+
+    const selectOrgDialog = this.dialog.open(SelectOrganisationComponent, {
+      width: '22em',
+      data: {organisations: organisations}
+    });
+
+    return selectOrgDialog.afterClosed();
+  }
+
+  /**
+   * Navigates the user to a selected portal
+   * @param portals array of potiential portals the user can go to
+   */
+  selectPortal(portals: Array<string>) {
+    this.dialog.open(SelectPortalComponent, {
+      width: '15em',
+      data: { portals: portals}
+    }).afterClosed().subscribe(result => {
+      if (!result) {
+        this.resetLoginProcess();
+      } else {
+        this.router.navigate([result.toLowerCase()]);
+      }
+    });
+  }
+
+  /**
+   * Reset the login process
+   */
+  resetLoginProcess() {
+    this.errorMsg = new ErrorMessage();
+    this.showLoading = false;
+    this.fireAuth.auth.signOut();
+  }
+
+  /**
+   * Opens the Forgot Password dialog
+   */
   openResetPass() {
     this.dialog.open(ForgotPasswordComponent, {
       width: '22em',
-      data: {email: this.email }
+    data: {email: this.email }
     });
   }
 }
