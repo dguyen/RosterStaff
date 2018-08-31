@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ShiftService } from '../../_services/shift/shift.service';
+import { Shift } from '../../_services/shift/shift';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-shifts',
@@ -6,31 +9,52 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./shifts.component.scss']
 })
 export class ShiftsComponent implements OnInit {
-  avaliableShifts: any[] = [
-    {Location: 'Mount Waverley', Date: '26/03/16', Start: 1400, End: 1600, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Glen Waverley', Date: '22/03/16', Start: 1600, End: 2200, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Ashwood', Date: '26/04/16', Start: 1500, End: 2000, Duration: 500, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Clayton', Date: '21/06/16', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Clayton', Date: '21/06/16', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Slamtown Downtown', Date: '28/06/15', Start: 2000, End: 2200, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'y'}
-  ];
+  avaliableShifts: Shift[];
+  currentShifts: Shift[];
+  shiftHistory: Shift[];
 
-  currentShifts: any[] = [
-    {Location: 'Clayton', Date: '21/06/16', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Ashwood', Date: '26/04/16', Start: 1500, End: 2000, Duration: 500, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'}
-  ];
-
-  shiftHistory: any[] = [
-    {Location: 'Mount Waverley', Date: '26/03/16', Start: 1400, End: 1600, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Glen Waverley', Date: '22/03/16', Start: 1600, End: 2200, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Ashwood', Date: '26/04/16', Start: 1500, End: 2000, Duration: 500, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Clayton', Date: '21/06/16', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Clayton', Date: '21/06/16', Start: 1400, End: 2000, Duration: 600, Note: 'n/a', Replacement: 'n/a', On_Duty: 'yeet'},
-    {Location: 'Slamtown Downtown', Date: '28/06/15', Start: 2000, End: 2200, Duration: 200, Note: 'n/a', Replacement: 'n/a', On_Duty: 'y'}
-  ];
-  constructor() { }
-
-  ngOnInit() {
+  constructor(public shiftService: ShiftService) {
   }
 
+  ngOnInit() {
+    this.shiftService.getShifts();
+    this.avaliableShifts = this.shiftService.shifts;
+
+    // console.log(this.avaliableShifts);
+
+    this.shiftService.shiftStream.subscribe((data: Shift[]) => {
+      this.updateShifts(data);
+    });
+  }
+
+  updateShifts(data: Shift[]) {
+    const pendingShifts = new Array<Shift>();
+    const currentShifts = new Array<Shift>();
+
+    data.forEach(aShift => {
+      const status = this.getStatus(aShift);
+      if (status == null && !this.hasPassed(aShift)) {
+        pendingShifts.push(aShift);
+      } else if (status && !this.hasPassed(aShift)) {
+        currentShifts.push(aShift);
+      }
+    });
+
+    this.shiftHistory = data;
+    this.avaliableShifts = pendingShifts;
+    this.currentShifts = currentShifts;
+  }
+
+  // TODO: return true if date has passed
+  hasPassed(shift: Shift) {
+    return false;
+  }
+
+  getStatus(shift: Shift) {
+    if (!shift) { throw new Error('Parametter is undefined'); }
+
+    return shift.onDuty.find((element) => {
+      return element.uid === this.shiftService.userService.uid;
+    }).accepted;
+  }
 }
