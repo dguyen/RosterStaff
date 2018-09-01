@@ -56,10 +56,11 @@ export class ShiftsComponent implements OnInit, OnDestroy {
   }
 
   getStatus(shift: Shift) {
-    if (!shift) { throw new Error('Parametter is undefined'); }
-
-    return shift.onDuty.find((element) => {
-      return element.uid === this.shiftService.userService.uid;
-    }).accepted;
+    if (!shift) { throw new Error('Parameter is undefined'); }
+    const uid = this.shiftService.userService.uid;
+    if (shift.onDuty[uid]) {
+      return shift.onDuty[uid].accepted;
+    }
+    throw Error('onDuty data not found on shift');
   }
 }
