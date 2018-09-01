@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ShiftService } from '../../_services/shift/shift.service';
 import { Shift } from '../../_services/shift/shift';
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-shifts',
   templateUrl: './shifts.component.html',
   styleUrls: ['./shifts.component.scss']
 })
-export class ShiftsComponent implements OnInit {
+export class ShiftsComponent implements OnInit, OnDestroy {
+  private shiftStreamRef: Subscription;
   avaliableShifts: Shift[];
   currentShifts: Shift[];
   shiftHistory: Shift[];
@@ -17,14 +18,18 @@ export class ShiftsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.shiftService.getShifts();
     this.avaliableShifts = this.shiftService.shifts;
 
-    // console.log(this.avaliableShifts);
-
-    this.shiftService.shiftStream.subscribe((data: Shift[]) => {
+    if (this.shiftService.shifts.length > 0) {
+      this.updateShifts(this.shiftService.shifts);
+    }
+    this.shiftStreamRef = this.shiftService.shiftStream.subscribe((data: Shift[]) => {
       this.updateShifts(data);
     });
+  }
+
+  ngOnDestroy() {
+    if (this.shiftStreamRef) { this.shiftStreamRef.unsubscribe(); }
   }
 
   updateShifts(data: Shift[]) {

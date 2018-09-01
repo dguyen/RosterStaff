@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild, OnChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Shift } from '../../../../_services/shift/shift';
 import { ShiftService } from '../../../../_services/shift/shift.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-list',
@@ -15,18 +16,16 @@ export class ListComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
 
   columnsToDisplay: string[] = [];
-  dataSource: MatTableDataSource<any>;
+  dataSource = new MatTableDataSource<Shift>();
 
   constructor(public shiftService: ShiftService) {}
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.shiftData);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
   ngOnChanges() {
-    console.log('Data source changed');
     if (this.shiftData) {
       this.refreshTable();
     }
@@ -41,7 +40,8 @@ export class ListComponent implements OnInit, OnChanges {
   }
 
   refreshTable() {
-    this.dataSource = new MatTableDataSource(this.shiftData);
+    this.dataSource.data = this.shiftData;
+
     // if (this.shiftData.length > 0) {
     //   this.columnsToDisplay = Object.keys(this.shiftData[0]);
     // }

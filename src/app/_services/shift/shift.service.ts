@@ -14,6 +14,22 @@ export class ShiftService {
 
   constructor(public userService: UserService, public fireDb: AngularFirestore) {
     console.log('Init ShiftService');
+    this.shiftListener();
+  }
+
+  shiftListener() {
+    this.fireDb.collection('organisation/crystal-palace/staff').doc(this.userService.uid).valueChanges().subscribe((data) => {
+      const tmp = [];
+      for (let i = 0; i < data['shifts'].length; i++) {
+        data['shifts'][i].get().then((shiftData) => {
+          tmp.push(shiftData.data());
+          if (data['shifts'].length <= i + 1) {
+            this.shifts = tmp;
+            this.shiftStream.next(this.shifts);
+          }
+        });
+      }
+    });
   }
 
   // TODO
@@ -40,12 +56,12 @@ export class ShiftService {
   }
 
   getShifts() {
-    this.fireDb.collection('organisation/crystal-palace/staff').doc(this.userService.uid).valueChanges().subscribe((data) => {
-      data['shifts'].forEach(element => {
-        element.get().then((shiftData) => {
-          this.shifts.push(shiftData.data());
-          this.shiftStream.next(this.shifts); // TODO: post next after all data gathered
-        });
+    return new Promise((resolve, reject) => {
+      if (this.shifts.length > 0) {
+        resolve(this.shifts);
+      }
+      this.shiftStream.subscribe((shiftData) => {
+        resolve(shiftData);
       });
     });
   }
