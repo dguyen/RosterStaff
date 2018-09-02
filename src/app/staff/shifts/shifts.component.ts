@@ -61,6 +61,6 @@ export class ShiftsComponent implements OnInit, OnDestroy {
     if (shift.onDuty[uid]) {
       return shift.onDuty[uid].accepted;
     }
-    throw Error('onDuty data not found on shift');
+    throw Error('onDuty property missing from Shift');
   }
 }
