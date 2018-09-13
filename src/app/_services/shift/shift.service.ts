@@ -10,6 +10,7 @@ import 'firebase/firestore';
   providedIn: 'root'
 })
 export class ShiftService {
+  private shiftObservable;
   shiftRef = 'organisation/crystal-palace/shifts';
   staffRef = 'organisation/crystal-palace/staff';
   shifts = Array<Shift>();
@@ -20,7 +21,7 @@ export class ShiftService {
   }
 
   private shiftListener() {
-    this.fireDb.collection(this.staffRef).doc(this.userService.uid).valueChanges().subscribe((data) => {
+    this.shiftObservable = this.fireDb.collection(this.staffRef).doc(this.userService.uid).valueChanges().subscribe((data) => {
       const tmp = Array<Shift>();
       if (!data.hasOwnProperty('shifts')) { return; }
       for (let i = 0; i < data['shifts'].length; i++) {
@@ -119,8 +120,14 @@ export class ShiftService {
       tmp['onDuty.' + this.userService.uid + '.accepted'] = decision;
       this.fireDb.collection(this.shiftRef).doc(shift.shiftId).update(tmp).then(() => {
         resolve();
+        this.updateShifts();
       }).catch((err) => reject(err));
     });
+  }
+
+  private updateShifts() {
+    this.shiftObservable.unsubscribe();
+    this.shiftListener();
   }
 
   /**
@@ -131,9 +138,11 @@ export class ShiftService {
       if (this.shifts.length > 0) {
         resolve(this.shifts);
       }
-      this.shiftStream.subscribe((shiftData) => {
+      const stream = this.shiftStream.subscribe((shiftData) => {
         resolve(shiftData);
+        stream.unsubscribe();
       });
     });
   }
 }
+
