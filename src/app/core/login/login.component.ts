@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { AngularFireAuth } from 'angularfire2/auth';
-import { UserService } from '../_services/user/user.service';
+import { UserService } from '../../_services/user/user.service';
 
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { SelectOrganisationComponent } from './select-organisation/select-organisation.component';
@@ -33,6 +33,7 @@ export class LoginComponent {
     private router: Router,
     private dialog: MatDialog
   ) {
+
     const unsubscribe = this.fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.routeUser();
@@ -56,11 +57,7 @@ export class LoginComponent {
 
     // Get roles
     this.userService.getRoles().then((roles: string[]) => {
-      if (roles.length > 1) {
-        this.selectPortal(roles);
-      } else {
-        this.router.navigate([roles[0].toLowerCase()]);
-      }
+      this.selectPortal(roles);
     }).catch((err) => {
       console.log(err);
     });
@@ -118,6 +115,11 @@ export class LoginComponent {
    * @param portals array of potiential portals the user can go to
    */
   selectPortal(portals: Array<string>) {
+    if (portals.length === 1) {
+      this.router.navigate([portals[0].toLowerCase()]);
+      return;
+    }
+
     this.dialog.open(SelectPortalComponent, {
       width: '15em',
       data: { portals: portals}
@@ -126,6 +128,7 @@ export class LoginComponent {
         this.resetLoginProcess();
       } else {
         this.router.navigate([result.toLowerCase()]);
+        return;
       }
     });
   }

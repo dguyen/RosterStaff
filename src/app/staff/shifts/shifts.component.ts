@@ -18,13 +18,8 @@ export class ShiftsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.avaliableShifts = this.shiftService.shifts;
-
-    if (this.shiftService.shifts.length > 0) {
-      this.updateShifts(this.shiftService.shifts);
-    }
-    this.shiftStreamRef = this.shiftService.shiftStream.subscribe((data: Shift[]) => {
-      this.updateShifts(data);
+    this.shiftService.getShifts().then((shifts: Shift[]) => {
+      this.updateShifts(shifts);
     });
   }
 

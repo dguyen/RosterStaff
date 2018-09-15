@@ -1,4 +1,4 @@
-import { MenuItem } from '../../_services/menu/menu-item';
+import { MenuItem } from '../_services/menu/menu-item';
 
 export let StaffMenuItems = [
   new MenuItem('Dashboard', 'dashboard', 'home', false),

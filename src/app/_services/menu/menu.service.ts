@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
 
 import { MenuItem } from './menu-item';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
   menuItems: Array<MenuItem>;
+  menuUpdate = new Subject();
+  menuSideOpened = true;
 
-  constructor(menuItems: Array<MenuItem>) {
+  constructor() {}
+
+  loadMenu(menuItems: Array<MenuItem>) {
     this.menuItems = menuItems;
+    this.menuUpdate.next();
   }
 
   /**
@@ -26,6 +32,10 @@ export class MenuService {
       }
     }
     return false;
+  }
+
+  toggleMenuSidebar() {
+    this.menuSideOpened = !this.menuSideOpened;
   }
 
   /**
