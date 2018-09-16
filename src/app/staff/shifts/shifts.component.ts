@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ShiftService } from '../../_services/shift/shift.service';
 import { Shift } from '../../_services/shift/shift';
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-shifts',
@@ -10,12 +10,11 @@ import { Subscription } from 'rxjs';
 })
 export class ShiftsComponent implements OnInit, OnDestroy {
   private shiftStreamRef: Subscription;
-  avaliableShifts: Shift[];
-  currentShifts: Shift[];
-  shiftHistory: Shift[];
+  pendingShiftStream = new Subject();
+  shiftHistoryStream = new Subject();
+  currentShiftStream = new Subject();
 
-  constructor(public shiftService: ShiftService) {
-  }
+  constructor(public shiftService: ShiftService) { }
 
   ngOnInit() {
     this.shiftService.getShifts().then((shifts: Shift[]) => {
@@ -40,9 +39,9 @@ export class ShiftsComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.shiftHistory = data;
-    this.avaliableShifts = pendingShifts;
-    this.currentShifts = currentShifts;
+    this.shiftHistoryStream.next(data);
+    this.pendingShiftStream.next(pendingShifts);
+    this.currentShiftStream.next(currentShifts);
   }
 
   // TODO: return true if date has passed

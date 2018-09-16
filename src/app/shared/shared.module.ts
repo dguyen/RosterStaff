@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { MaterialModule } from '../material.module';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule
   ],
-  declarations: []
+  declarations: [
+    ConfirmationComponent
+  ],
+  entryComponents: [ConfirmationComponent]
 })
 export class SharedModule { }

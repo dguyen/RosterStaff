@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '../core/core.module';
 
-import { MaterialModule } from '../material.module';
 import { StaffRoutingModule } from './staff-routing.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ShiftsComponent } from './shifts/shifts.component';
@@ -17,8 +17,8 @@ import { StaffPortalComponent } from './staff-portal/staff-portal.component';
   imports: [
     CommonModule,
     CoreModule,
+    SharedModule,
     StaffRoutingModule,
-    MaterialModule
   ],
   declarations: [
     DashboardComponent,

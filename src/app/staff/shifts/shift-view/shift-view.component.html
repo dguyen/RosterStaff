@@ -1,8 +1,23 @@
-<button mat-icon-button id="toggleView" (click)="showList = !showList">
-  <mat-icon *ngIf="!showList">view_list</mat-icon>
-  <mat-icon *ngIf="showList">calendar_today</mat-icon>
-</button>
-<div id="content">
-  <app-list *ngIf="showList" [shiftData]='data'></app-list>
-  <app-calendar *ngIf="!showList" [shiftData]='data'></app-calendar>
+<div id="toggleView">
+  <button mat-icon-button [disabled]="showList" (click)="showList = !showList">
+    <mat-icon>view_list</mat-icon>
+  </button>
+  <button mat-icon-button [disabled]="!showList" (click)="showList = !showList">
+    <mat-icon>calendar_today</mat-icon>
+  </button>
+</div>
+
+<div>
+  <div id="content" *ngIf="data != null">
+    <app-list *ngIf="showList" [allowAccept]='allowAccept' [shiftStream]='data'></app-list>
+    <app-calendar *ngIf="!showList" [shiftData]='data'></app-calendar>
+  </div>
+  
+  <div id="spinnerContainer" *ngIf="data == null">
+    <mat-spinner 
+      mode="indeterminate"
+      diameter=40
+      color="accent">
+    </mat-spinner>  
+  </div>
 </div>

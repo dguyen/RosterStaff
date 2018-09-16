@@ -7,6 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class ShiftViewComponent {
   @Input() data;
+  @Input() allowAccept;
   showList = true;
 
   constructor() { }

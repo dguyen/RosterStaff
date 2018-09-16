@@ -32,6 +32,7 @@ import { MenuComponent } from './menu/menu.component';
   ],
   exports: [
     MenuComponent,
+    MaterialModule
   ]
 })
 export class CoreModule { }
