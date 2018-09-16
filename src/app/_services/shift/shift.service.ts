@@ -30,11 +30,10 @@ export class ShiftService {
             const tmpData = shiftData.data();
             tmpData.shiftId = shiftData.id;
             tmp.push(tmpData);
-
-            if (data['shifts'].length <= i + 1) {
-              this.shifts = tmp;
-              this.shiftStream.next(this.shifts);
-            }
+          }
+          if (data['shifts'].length <= i + 1) {
+            this.shifts = tmp;
+            this.shiftStream.next(this.shifts);
           }
         });
       }
