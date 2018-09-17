@@ -8,16 +8,8 @@
 </div>
 
 <div>
-  <div id="content" *ngIf="data != null">
+  <div id="content">
     <app-list *ngIf="showList" [allowAccept]='allowAccept' [shiftStream]='data'></app-list>
     <app-calendar *ngIf="!showList" [shiftData]='data'></app-calendar>
-  </div>
-  
-  <div id="spinnerContainer" *ngIf="data == null">
-    <mat-spinner 
-      mode="indeterminate"
-      diameter=40
-      color="accent">
-    </mat-spinner>  
   </div>
 </div>

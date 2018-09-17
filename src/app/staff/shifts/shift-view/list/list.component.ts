@@ -22,8 +22,9 @@ export class ListComponent implements OnInit {
   dynamicColumns: string[] = [];
   dataSource = new MatTableDataSource<Shift>();
   selection = new SelectionModel<Shift>(true, []);
+  loadingData = true;
 
-  constructor(public shiftService: ShiftService, private dialog: MatDialog, private snackBar: MatSnackBar) {}
+  constructor(public shiftService: ShiftService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
@@ -31,6 +32,7 @@ export class ListComponent implements OnInit {
     this.loadColumns();
 
     this.shiftStream.subscribe((data: Shift[]) => {
+      this.loadingData = false;
       this.dataSource.data = data;
     });
   }
@@ -61,7 +63,8 @@ export class ListComponent implements OnInit {
     // }
     // TODO: Remove hardcode
 
-    this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakStart', 'breakEnd', 'note', 'onDuty'];
+    // this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakStart', 'breakEnd', 'note', 'onDuty'];
+    this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakStart', 'breakEnd', 'note'];
 
     if (this.allowAccept) {
       this.columnsToDisplay = ['select'].concat( this.dynamicColumns);
@@ -70,6 +73,7 @@ export class ListComponent implements OnInit {
     }
   }
 
+  /** Get a prettified version of a column name if exists */
   getColumnName(name: string) {
     const colName = {
       location: 'Location',
@@ -84,6 +88,7 @@ export class ListComponent implements OnInit {
     return colName[name] ? colName[name] : name;
   }
 
+  /** Update a staff member's shift status to accepted or declined */
   updateShift(decision: boolean) {
     const selection = this.selection.selected;
 
@@ -106,6 +111,7 @@ export class ListComponent implements OnInit {
     }
   }
 
+  /** Preemptively remove a shift from the table  */
   removeElement(shift: Shift) {
     const tmpData = this.dataSource.data;
     const index = tmpData.indexOf(shift);
@@ -113,5 +119,15 @@ export class ListComponent implements OnInit {
       tmpData.splice(index, 1);
       this.dataSource.data = tmpData;
     }
+  }
+
+  /** Formats elements on the table for users to view */
+  formatItem(item: any) {
+    if (item['seconds'] || item['seconds'] === 0) {
+      const tmpDate = new Date(Number.parseInt((item['seconds'] + '000')));
+      const dateString = tmpDate.toUTCString();
+      return dateString.split(' ', 4).join(' ');
+    }
+    return item;
   }
 }
