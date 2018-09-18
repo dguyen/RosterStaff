@@ -124,7 +124,7 @@ export class ListComponent implements OnInit {
   /** Formats elements on the table for users to view */
   formatItem(item: any) {
     if (item['seconds'] || item['seconds'] === 0) {
-      const tmpDate = new Date(Number.parseInt((item['seconds'] + '000')));
+      const tmpDate = new Date(item['seconds'] * 1000);
       const dateString = tmpDate.toUTCString();
       return dateString.split(' ', 4).join(' ');
     }
