@@ -27,9 +27,9 @@ export class ShiftService {
       for (let i = 0; i < data['shifts'].length; i++) {
         data['shifts'][i].get().then((shiftData) => {
           if (shiftData.exists) {
-            const tmpData = shiftData.data();
-            tmpData.shiftId = shiftData.id;
-            tmp.push(tmpData);
+            const newShift = Object.assign(new Shift(), shiftData.data());
+            newShift.shiftId = shiftData.id;
+            tmp.push(newShift);
           }
           if (data['shifts'].length <= i + 1) {
             this.shifts = tmp;

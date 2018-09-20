@@ -34,6 +34,15 @@ export class MenuService {
     return false;
   }
 
+  /**
+   * Returns the badge number of the first menu found with the given menu name
+   * @param menuName name of menu
+   */
+  getBadge(menuName: string) {
+    const menu = this.menuItems.filter((mItem) => mItem.name === menuName);
+    return menu.length !== 0 ? menu[0].badgeNum : 0;
+  }
+
   toggleMenuSidebar() {
     this.menuSideOpened = !this.menuSideOpened;
   }

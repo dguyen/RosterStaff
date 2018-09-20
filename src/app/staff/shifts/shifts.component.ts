@@ -35,12 +35,12 @@ export class ShiftsComponent implements OnInit, OnDestroy {
   updateShifts(data: Shift[]) {
     const pendingShifts = new Array<Shift>();
     const currentShifts = new Array<Shift>();
-
+    const uid = this.shiftService.userService.uid;
     data.forEach(aShift => {
-      const status = this.getStatus(aShift);
-      if (status == null && !this.hasPassed(aShift)) {
+      const status = aShift.getStatus(uid);
+      if (status == null && !aShift.hasStarted()) {
         pendingShifts.push(aShift);
-      } else if (status && !this.hasPassedIncDuration(aShift)) {
+      } else if (status && !aShift.hasPassed()) {
         currentShifts.push(aShift);
       }
     });
@@ -48,38 +48,5 @@ export class ShiftsComponent implements OnInit, OnDestroy {
     this.shiftHistoryStream.next(data);
     this.pendingShiftStream.next(pendingShifts);
     this.currentShiftStream.next(currentShifts);
-  }
-
-  /** Returns true if shift date has already passed  */
-  hasPassed(shift: Shift) {
-    if (!shift) { throw new Error('Parameter is undefined'); }
-    return (shift.date['seconds']) * 1000 < Date.now();
-  }
-
-  /** Returns true if (shift date + shift duration) has already passed  */
-  hasPassedIncDuration(shift: Shift) {
-    if (!shift) { throw new Error('Parameter is undefined'); }
-    const shiftLength = (shift.end - shift.start).toString();
-    let additionalSeconds = 0;
-
-    // Convert the shift duration into millis
-    if (shiftLength.length <= 2) {
-      additionalSeconds = Number.parseInt(shiftLength) * 60;
-    } else {
-      const sLength = shiftLength.length;
-      const minutes = Number.parseInt(shiftLength.substring(sLength - 2, sLength));
-      const hours = Number.parseInt(shiftLength.substring(0, sLength - 2));
-      additionalSeconds = hours * 3600 + minutes * 60;
-    }
-    return (shift.date['seconds'] + additionalSeconds) * 1000 < Date.now();
-  }
-
-  getStatus(shift: Shift) {
-    if (!shift) { throw new Error('Parameter is undefined'); }
-    const uid = this.shiftService.userService.uid;
-    if (shift.onDuty[uid]) {
-      return shift.onDuty[uid].accepted;
-    }
-    throw Error('onDuty property missing from Shift');
   }
 }

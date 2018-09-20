@@ -5,6 +5,7 @@ import { Shift } from '../../../../_services/shift/shift';
 import { ShiftService } from '../../../../_services/shift/shift.service';
 import { ConfirmationComponent } from '../../../../shared/components/confirmation/confirmation.component';
 import { Subject } from 'rxjs';
+import { MenuService } from '../../../../_services/menu/menu.service';
 
 @Component({
   selector: 'app-list',
@@ -24,7 +25,11 @@ export class ListComponent implements OnInit {
   selection = new SelectionModel<Shift>(true, []);
   loadingData = true;
 
-  constructor(public shiftService: ShiftService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
+  constructor(
+    public shiftService: ShiftService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private menuService: MenuService) { }
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
@@ -97,11 +102,14 @@ export class ListComponent implements OnInit {
         width: '15em',
       }).afterClosed().subscribe((result) => {
         if (result) {
+          let shiftBadge = this.menuService.getBadge('Shifts');
           selection.forEach(element => {
+            shiftBadge--;
             decision ?
               this.shiftService.acceptShift(element) :
               this.shiftService.declineShift(element);
               this.removeElement(element);
+              this.menuService.setBadge('Shifts', shiftBadge);
           });
           this.selection.clear();
         }
