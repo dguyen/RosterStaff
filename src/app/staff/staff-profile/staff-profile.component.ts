@@ -5,11 +5,11 @@ import { MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-staff-profile',
+  templateUrl: './staff-profile.component.html',
+  styleUrls: ['./staff-profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class StaffProfileComponent implements OnInit {
   passwordForm: FormGroup;
   savingPassword = false;
 

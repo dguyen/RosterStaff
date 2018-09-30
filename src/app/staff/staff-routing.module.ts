@@ -5,9 +5,9 @@ import { AuthGuard } from '../_guards/auth.guard';
 import { RoleGuard } from '../_guards/role.guard';
 
 import { StaffPortalComponent } from './staff-portal/staff-portal.component';
-import { ProfileComponent } from './profile/profile.component';
 import { ShiftsComponent } from './shifts/shifts.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
+import { StaffProfileComponent } from './staff-profile/staff-profile.component';
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        component: StaffDashboardComponent,
       },
       {
         path: 'shifts',
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfileComponent,
+        component: StaffProfileComponent,
       },
       {
         path: '**',

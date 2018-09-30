@@ -5,9 +5,9 @@ import { CoreModule } from '../core/core.module';
 import { StaffRoutingModule } from './staff-routing.module';
 import { SharedModule } from '../shared/shared.module';
 
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
 import { ShiftsComponent } from './shifts/shifts.component';
-import { ProfileComponent } from './profile/profile.component';
+import { StaffProfileComponent } from './staff-profile/staff-profile.component';
 import { ShiftViewComponent } from './shifts/shift-view/shift-view.component';
 import { CalendarComponent } from './shifts/shift-view/calendar/calendar.component';
 import { ListComponent } from './shifts/shift-view/list/list.component';
@@ -21,9 +21,9 @@ import { StaffPortalComponent } from './staff-portal/staff-portal.component';
     StaffRoutingModule,
   ],
   declarations: [
-    DashboardComponent,
+    StaffDashboardComponent,
     ShiftsComponent,
-    ProfileComponent,
+    StaffProfileComponent,
     StaffPortalComponent,
     ShiftViewComponent,
     CalendarComponent,
