@@ -3,6 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { AdminPortalComponent } from './admin-portal/admin-portal.component';
+import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
+import { AdminStaffComponent } from './admin-staff/admin-staff.component';
+import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 
 import { AuthGuard } from '../_guards/auth.guard';
 import { RoleGuard } from '../_guards/role.guard';
@@ -18,6 +21,18 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: AdminDashboardComponent
+      },
+      {
+        path: 'shifts',
+        component: AdminShiftsComponent
+      },
+      {
+        path: 'staff',
+        component: AdminStaffComponent
+      },
+      {
+        path: 'profile',
+        component: AdminProfileComponent
       },
       {
         path: '**',
