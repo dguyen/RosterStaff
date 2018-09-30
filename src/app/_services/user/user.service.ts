@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, Subscription, Subject } from 'rxjs';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 class Profile {
   firstName: '';
@@ -28,7 +30,7 @@ export class UserService {
   dataReady: any;
   dataStream = new Subject();
 
-  constructor(fireAuth: AngularFireAuth, fireDb: AngularFirestore) {
+  constructor(private fireAuth: AngularFireAuth, fireDb: AngularFirestore) {
     this.fireDb = fireDb;
 
     fireAuth.auth.onAuthStateChanged((user) => {
@@ -135,5 +137,25 @@ export class UserService {
       return this.profile.firstName + ' ' + this.profile.lastName;
     }
     return '';
+  }
+
+  /**
+   * Reauthenticate signed in user
+   * @param password a string representing the password of the user currently logged in
+   */
+  reauthenticateUser(password: string) {
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      this.fireAuth.auth.currentUser.email,
+      password
+    );
+
+    return new Promise((resolve, reject) => {
+      if (!this.fireAuth.auth.currentUser) { reject(); }
+      this.fireAuth.auth.currentUser.reauthenticateAndRetrieveDataWithCredential(credential).then(() => {
+        resolve();
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 }
