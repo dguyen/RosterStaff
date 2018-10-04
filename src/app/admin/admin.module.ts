@@ -8,6 +8,7 @@ import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 import { AdminStaffComponent } from './admin-staff/admin-staff.component';
 import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
 import { AdminProfileComponent } from './admin-profile/admin-profile.component';
+import { AddShiftComponent } from './admin-shifts/add-shift/add-shift.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { AdminProfileComponent } from './admin-profile/admin-profile.component';
     AdminStaffComponent,
     AdminShiftsComponent,
     AdminProfileComponent,
+    AddShiftComponent,
   ]
 })
 export class AdminModule { }
