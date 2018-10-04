@@ -1,11 +1,7 @@
-#addShiftContainer {
-    width: 100%;
-    margin-bottom: 0.25em;
-}
-
-#newShiftCard, #rosterStaffCard {
+#addStaffCard {
     margin: auto;
     margin-top: 2em;
+    margin-bottom: 0.5em;
     max-width: 80%;
 
     @media (max-width: 30rem) {
@@ -15,26 +11,22 @@
     }
 }
 
-#newShiftForm {
+#addStaffForm {
     mat-form-field {
         width: 100%;
         max-width: 100%;
     }
 }
 
-table {
-    width: calc(100% + 48px);
-    margin-left: -24px;
-    box-shadow: none;
+#buttonContainer {
+    float: right;
+    button {
+        margin: 0.5em;
+    }
 }
 
-.verticallyCenterItems {
+.verticalAlign {
     display: flex;
     justify-content: center;
     flex-direction: column;
-}
-
-#createShiftButton {
-    margin-left: 2em;
-    margin-right: 2em;
 }

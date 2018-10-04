@@ -8,15 +8,12 @@
           <div class="col">
             <mat-form-field>
               <mat-select placeholder="Location*">
+                <mat-option (click)="addNewLocation()">Add new location</mat-option>            
                 <mat-option *ngFor="let location of locations" [value]="location.description">
                   {{location.description}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-
-          </div>
-          <div class="verticallyCenterItems">
-            <mat-icon>add</mat-icon>
           </div>
 
           <div class="col-4">
