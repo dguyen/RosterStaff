@@ -3,7 +3,7 @@
     height: 100%;
 }
 
-#basicInfo, #securityCard {
+#basicInfo, #resetPassCard {
     margin: auto;
     margin-top: 2em;
     max-width: 80%;
@@ -15,16 +15,11 @@
     }
 }
 
-#basicInfoForm, #confirmPasswordForm {
+#basicInfoForm {
     mat-form-field {
         width: 100%;
         max-width: 100%;
     }
-
-    .col {
-        padding-left: 0.5em;
-        padding-right: 0.5em;
-    } 
 }
 
 mat-card-actions {
