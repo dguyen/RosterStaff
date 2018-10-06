@@ -68,8 +68,7 @@ export class ListComponent implements OnInit {
     // }
     // TODO: Remove hardcode
 
-    // this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakStart', 'breakEnd', 'note', 'onDuty'];
-    this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakStart', 'breakEnd', 'note'];
+    this.dynamicColumns = ['location', 'date', 'start', 'end', 'breakDuration', 'note'];
 
     if (this.allowAccept) {
       this.columnsToDisplay = ['select'].concat( this.dynamicColumns);
@@ -84,8 +83,7 @@ export class ListComponent implements OnInit {
       location: 'Location',
       start: 'Start',
       end: 'End',
-      breakStart: 'Break start',
-      breakEnd: 'Break end',
+      breakDuration: 'Break Duration',
       note: 'Note',
       onDuty: 'On duty',
       date: 'Date'
@@ -131,6 +129,8 @@ export class ListComponent implements OnInit {
 
   /** Formats elements on the table for users to view */
   formatItem(item: any) {
+    if (item === 0) { return '0'; }
+    if (!item) { return ''; }
     if (item['seconds'] || item['seconds'] === 0) {
       const tmpDate = new Date(item['seconds'] * 1000);
       const dateString = tmpDate.toUTCString();

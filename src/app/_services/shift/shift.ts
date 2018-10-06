@@ -3,8 +3,7 @@ export class Shift {
   location: string;
   start: number;
   end: number;
-  breakStart: number;
-  breakEnd: number;
+  breakDuration: number;
   note: string;
   onDuty: {};
   date: Date;
