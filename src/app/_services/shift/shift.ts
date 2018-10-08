@@ -1,6 +1,8 @@
+import { ShiftLocation } from './shift.service';
+
 export class Shift {
   shiftId: string;
-  location: string;
+  location: ShiftLocation;
   start: number;
   end: number;
   breakDuration: number;

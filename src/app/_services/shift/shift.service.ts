@@ -6,6 +6,11 @@ import { Subject } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
+export interface ShiftLocation {
+  description: string;
+  address: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,6 +18,7 @@ export class ShiftService {
   private shiftObservable;
   shiftRef = 'organisation/crystal-palace/shifts';
   staffRef = 'organisation/crystal-palace/staff';
+  shiftLocRef = 'organisation/crystal-palace/locations';
   shifts = Array<Shift>();
   shiftStream = new Subject();
 
@@ -20,10 +26,47 @@ export class ShiftService {
     this.shiftListener();
   }
 
+  /**
+   * Get an observable that obtains all locations related to the selected organisation
+   */
+  getShiftLocations() {
+    return this.fireDb.collection(this.shiftLocRef).valueChanges();
+  }
+
+  /**
+   * Add a new shift location
+   * @param newShiftLoc a new shift location to create
+   */
+  addShiftLocation(newShiftLoc: ShiftLocation) {
+    const tmpLoc = Object.assign({}, newShiftLoc);
+    return this.fireDb.collection(this.shiftLocRef).add(tmpLoc);
+  }
+
+  /**
+   * Edit a shift location
+   * @param locationUID UID of the shift location
+   * @param updatedLoc the updated shift location
+   */
+  editShiftLocation(locationUID: string, updatedLoc: ShiftLocation) {
+    const tmpLoc = Object.assign({}, updatedLoc);
+    return this.fireDb.collection(this.shiftLocRef).doc(locationUID).update(tmpLoc);
+  }
+
+  /**
+   * Remove shift location from organisation
+   * @param locationUID UID of shift location
+   */
+  removeShiftLocation(locationUID) {
+    return this.fireDb.collection(this.shiftLocRef).doc(locationUID).delete();
+  }
+
   private shiftListener() {
     this.shiftObservable = this.fireDb.collection(this.staffRef).doc(this.userService.uid).valueChanges().subscribe((data) => {
       const tmp = Array<Shift>();
-      if (!data.hasOwnProperty('shifts')) { return; }
+      if (!data.hasOwnProperty('shifts')) {
+        this.shiftStream.next([]);
+        return;
+      }
       for (let i = 0; i < data['shifts'].length; i++) {
         data['shifts'][i].get().then((shiftData) => {
           if (shiftData.exists) {
@@ -134,12 +177,16 @@ export class ShiftService {
    */
   getShifts() {
     return new Promise((resolve) => {
-      if (this.shifts.length > 0) {
+      if (this.shifts) {
         resolve(this.shifts);
+        return;
       }
       const stream = this.shiftStream.subscribe((shiftData) => {
-        resolve(shiftData);
-        stream.unsubscribe();
+        console.log(shiftData);
+        if (stream) {
+          resolve(shiftData);
+          stream.unsubscribe();
+        }
       });
     });
   }

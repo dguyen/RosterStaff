@@ -8,7 +8,7 @@
     <!-- Dynamic Columns -->
     <ng-container [matColumnDef]="column" *ngFor="let column of dynamicColumns">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ getColumnName(column) }} </th>
-      <td mat-cell *matCellDef="let element"> {{ formatItem(element[column]) }} </td>
+      <td mat-cell *matCellDef="let element"> {{ formatItem(element[column], column) }} </td>
     </ng-container>
 
     <!-- Checkbox Column -->

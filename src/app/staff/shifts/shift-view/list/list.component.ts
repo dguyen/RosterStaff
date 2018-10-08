@@ -128,14 +128,18 @@ export class ListComponent implements OnInit {
   }
 
   /** Formats elements on the table for users to view */
-  formatItem(item: any) {
-    if (item === 0) { return '0'; }
-    if (!item) { return ''; }
-    if (item['seconds'] || item['seconds'] === 0) {
-      const tmpDate = new Date(item['seconds'] * 1000);
-      const dateString = tmpDate.toUTCString();
-      return dateString.split(' ', 4).join(' ');
+  formatItem(item: any, column: any) {
+    switch (column) {
+      case 'location':
+        return item.description;
+      case 'breakDuration':
+        return item ? item : 0;
+      case 'date':
+        const tmpDate = new Date(item['seconds'] * 1000);
+        const dateString = tmpDate.toUTCString();
+        return dateString.split(' ', 4).join(' ');
+      default:
+        return item;
     }
-    return item;
   }
 }
