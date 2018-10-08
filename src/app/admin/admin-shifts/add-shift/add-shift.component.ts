@@ -1,24 +1,20 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatTableDataSource, MatSort, MatSnackBar } from '@angular/material';
+import { MatTableDataSource, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { CreateUpdateLocationComponent } from '../create-update-location/create-update-location.component';
 
 import { ShiftService } from '../../../_services/shift/shift.service';
 import { StaffService } from '../../../_services/staff/staff.service';
 import { Shift } from '../../../_services/shift/shift';
 import { Staff } from '../../../_services/staff/staff';
 
-const mockupLocations = [
-  { 'description': 'Glen Waverley' },
-  { 'description': 'Mount Waverley' },
-];
 
 /**
  * Todo
  *  - Consider what happens when shift occurs overnight (start time > end time)
  *  - Consider a maximum limit for staff in a shift
  *  - Validate date so it cannot be in the past
- *  - Add ability to add new locations
  *  - Stop checkbox from unchecking after creating shift
  *  - Change date format from mm/dd/yy to dd/mm/yy (or to locale style)
  */
@@ -35,7 +31,8 @@ export class AddShiftComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   shiftForm: FormGroup;
-  locations = mockupLocations;
+  locations = [];
+  selectedLocation: any;
 
   // Indicates whether data is loading for specific tasks
   isLoading = {
@@ -47,11 +44,17 @@ export class AddShiftComponent implements OnInit {
   constructor(
     private shiftService: ShiftService,
     private staffService: StaffService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
     this.initializeRosterTable();
+
+    this.shiftService.getShiftLocations().subscribe((locations) => {
+      this.isLoading.location = false;
+      this.locations = locations;
+    });
 
     this.shiftForm = new FormGroup({
       'location': new FormControl('', Validators.required),
@@ -113,10 +116,19 @@ export class AddShiftComponent implements OnInit {
   }
 
   /**
-   * Add a new location for shifts
+   * Open a new dialog for a user to create a new location
    */
   addNewLocation() {
-    // Todo
+    const dialogRef = this.dialog.open(CreateUpdateLocationComponent, {
+      width: '50%',
+      data: { type: 'add' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.selectedLocation = this.locations.filter((x) => x.description === result.description)[0];
+      }
+    });
   }
 
   /**
