@@ -3,12 +3,12 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CreateUpdateLocationComponent } from '../create-update-location/create-update-location.component';
+import { ConfirmationComponent } from '../../../shared/components/confirmation/confirmation.component';
 
 import { ShiftService } from '../../../_services/shift/shift.service';
 import { StaffService } from '../../../_services/staff/staff.service';
 import { Shift } from '../../../_services/shift/shift';
 import { Staff } from '../../../_services/staff/staff';
-
 
 /**
  * Todo
@@ -95,6 +95,22 @@ export class AddShiftComponent implements OnInit {
   }
 
   /**
+   * Checks shift and confirms if shift should be created if no staff is rostered
+   */
+  submitShift() {
+    if (this.shiftForm.invalid) { return; }
+    if (Object.keys(this.getStaffUID()).length <= 0) {
+      const dialogRef = this.dialog.open(ConfirmationComponent, {
+        width: '30%',
+        data: { message: 'You currently have no staff rostered for this shift' }
+      });
+      dialogRef.afterClosed().subscribe(result => result ? this.createShift() : null);
+    } else {
+      this.createShift();
+    }
+  }
+
+  /**
    * Create a new shift
    */
   createShift() {
@@ -102,9 +118,6 @@ export class AddShiftComponent implements OnInit {
     this.isLoading.creatingShift = true;
     const newShift = Object.assign(new Shift, this.shiftForm.value);
     newShift.onDuty = this.getStaffUID();
-
-    // Todo: Confirm if user intended to create shift with no rostered staff
-    if (Object.keys(newShift.onDuty).length <= 0) {}
 
     this.shiftService.createShift(newShift).then(() => {
       this.isLoading.creatingShift = false;
