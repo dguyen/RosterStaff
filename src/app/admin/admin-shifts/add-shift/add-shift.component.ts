@@ -14,8 +14,6 @@ import { Staff } from '../../../_services/staff/staff';
  * Todo
  *  - Consider what happens when shift occurs overnight (start time > end time)
  *  - Consider a maximum limit for staff in a shift
- *  - Validate date so it cannot be in the past
- *  - Stop checkbox from unchecking after creating shift
  *  - Change date format from mm/dd/yy to dd/mm/yy (or to locale style)
  */
 
@@ -33,6 +31,7 @@ export class AddShiftComponent implements OnInit {
   shiftForm: FormGroup;
   locations = [];
   selectedLocation: any;
+  minDate = new Date();
 
   // Indicates whether data is loading for specific tasks
   isLoading = {
@@ -70,6 +69,13 @@ export class AddShiftComponent implements OnInit {
     this.staffService.staffStream.subscribe((staffArray: Staff[]) => {
       if (staffArray) {
         this.dataSource.data = staffArray;
+        const tmp = this.selection.selected.slice();
+        this.selection.clear();
+        this.dataSource.data.forEach(staffMember => {
+          if (tmp.filter((x: Staff) => x.uid === staffMember.uid).length === 1) {
+            this.selection.select(staffMember);
+          }
+        });
         this.isLoading.staff = false;
       }
     });
