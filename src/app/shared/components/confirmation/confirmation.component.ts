@@ -5,6 +5,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   selector: 'app-confirmation',
   template: `
     <h2 mat-dialog-title>Are you sure?</h2>
+    <div mat-dialog-content *ngIf="message">
+      <p>{{ message }}</p>
+    </div>
     <div>
       <mat-dialog-actions style="float:right">
         <button mat-button color="accent" mat-dialog-close>No</button>
@@ -14,8 +17,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   `
 })
 export class ConfirmationComponent {
+  message: string;
 
-  constructor(public dialogRef: MatDialogRef<ConfirmationComponent>) { }
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmationComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    if (data && Object.keys(data).includes('message')) {
+      this.message = data.message;
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

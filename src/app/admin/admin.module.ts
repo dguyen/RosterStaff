@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '../core/core.module';
+import { SharedModule } from '../shared/shared.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
@@ -16,6 +17,7 @@ import { CreateUpdateLocationComponent } from './admin-shifts/create-update-loca
   imports: [
     CommonModule,
     CoreModule,
+    SharedModule,
     AdminRoutingModule
   ],
   declarations: [
