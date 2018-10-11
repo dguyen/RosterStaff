@@ -12,6 +12,7 @@ import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { AddShiftComponent } from './admin-shifts/add-shift/add-shift.component';
 import { AddStaffComponent } from './admin-staff/add-staff/add-staff.component';
 import { CreateUpdateLocationComponent } from './admin-shifts/create-update-location/create-update-location.component';
+import { ViewLocationComponent, ShiftLocationSheetComponent } from './admin-shifts/view-location/view-location.component';
 
 @NgModule({
   imports: [
@@ -29,9 +30,12 @@ import { CreateUpdateLocationComponent } from './admin-shifts/create-update-loca
     AddShiftComponent,
     AddStaffComponent,
     CreateUpdateLocationComponent,
+    ShiftLocationSheetComponent,
+    ViewLocationComponent,
   ],
   entryComponents: [
-    CreateUpdateLocationComponent
+    CreateUpdateLocationComponent,
+    ShiftLocationSheetComponent
   ]
 })
 export class AdminModule { }

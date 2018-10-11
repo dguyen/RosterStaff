@@ -29,7 +29,6 @@ export class CreateUpdateLocationComponent {
   isLoading = false;
   title: string;
   dialogDetails: any;
-  locUID: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -47,7 +46,6 @@ export class CreateUpdateLocationComponent {
       this.dialogDetails = editLocation;
       this.locationForm.get('description').setValue(data.location.description);
       this.locationForm.get('address').setValue(data.location.address);
-      this.locUID = data.location.uid;
     }
   }
 
@@ -63,7 +61,8 @@ export class CreateUpdateLocationComponent {
     if (this.locationForm.invalid) { return; }
     this.isLoading = true;
     const updatedLoc = this.locationForm.value;
-    this.shiftService.editShiftLocation(this.locUID, updatedLoc).then(() => {
+    updatedLoc.uid = this.data.location.uid;
+    this.shiftService.editShiftLocation(updatedLoc).then(() => {
       this.isLoading = false;
       this.snackBar.open('Location Updated!', null, { duration: 3000 });
       this.dialogRef.close(updatedLoc);

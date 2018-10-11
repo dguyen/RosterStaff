@@ -1,0 +1,38 @@
+#shiftLocationContainer {
+  width: 100%;
+  margin-bottom: 0.25em;
+}
+
+#shiftLocationCard {
+  margin: auto;
+  margin-top: 2em;
+  max-width: 80%;
+
+  #title {
+    float: left;
+  }
+
+  #addLocationButton {
+    float: right;
+  }
+
+  @media (max-width: 30rem) {
+      max-width: 100%;
+      max-height: 100%;
+      margin-top: 1em;
+  }
+}
+
+table {
+  width: calc(100% + 48px);
+  margin-left: -24px;
+  box-shadow: none;
+
+  .locationRow:hover {
+    background: #f5f5f5;
+  }
+
+  .locationRow:active {
+    background: #efefef;
+  }
+}

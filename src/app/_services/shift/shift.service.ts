@@ -9,6 +9,7 @@ import 'firebase/firestore';
 export interface ShiftLocation {
   description: string;
   address: string;
+  uid: string;
 }
 
 @Injectable({
@@ -39,7 +40,8 @@ export class ShiftService {
    */
   addShiftLocation(newShiftLoc: ShiftLocation) {
     const tmpLoc = Object.assign({}, newShiftLoc);
-    return this.fireDb.collection(this.shiftLocRef).add(tmpLoc);
+    tmpLoc.uid = this.fireDb.createId();
+    return this.fireDb.collection(this.shiftLocRef).doc(tmpLoc.uid).set(tmpLoc);
   }
 
   /**
@@ -47,9 +49,9 @@ export class ShiftService {
    * @param locationUID UID of the shift location
    * @param updatedLoc the updated shift location
    */
-  editShiftLocation(locationUID: string, updatedLoc: ShiftLocation) {
+  editShiftLocation(updatedLoc: ShiftLocation) {
     const tmpLoc = Object.assign({}, updatedLoc);
-    return this.fireDb.collection(this.shiftLocRef).doc(locationUID).update(tmpLoc);
+    return this.fireDb.collection(this.shiftLocRef).doc(updatedLoc.uid).update(tmpLoc);
   }
 
   /**
@@ -182,7 +184,6 @@ export class ShiftService {
         return;
       }
       const stream = this.shiftStream.subscribe((shiftData) => {
-        console.log(shiftData);
         if (stream) {
           resolve(shiftData);
           stream.unsubscribe();
