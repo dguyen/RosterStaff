@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatSort, MatSnackBar, MatDialog } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CreateUpdateLocationComponent } from '../create-update-location/create-update-location.component';
 import { ConfirmationComponent } from '../../../shared/components/confirmation/confirmation.component';
+import { CreateUpdateLocationComponent } from '../../admin-location/create-update-location/create-update-location.component';
 
 import { ShiftService } from '../../../_services/shift/shift.service';
 import { StaffService } from '../../../_services/staff/staff.service';

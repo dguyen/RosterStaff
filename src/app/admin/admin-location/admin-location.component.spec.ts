@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewLocationComponent } from './view-location.component';
+import { AdminLocationComponent } from './admin-location.component';
 
-describe('ViewLocationComponent', () => {
-  let component: ViewLocationComponent;
-  let fixture: ComponentFixture<ViewLocationComponent>;
+describe('AdminLocationComponent', () => {
+  let component: AdminLocationComponent;
+  let fixture: ComponentFixture<AdminLocationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ViewLocationComponent ]
+      declarations: [ AdminLocationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewLocationComponent);
+    fixture = TestBed.createComponent(AdminLocationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

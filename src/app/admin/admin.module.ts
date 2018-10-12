@@ -11,8 +11,8 @@ import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
 import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { AddShiftComponent } from './admin-shifts/add-shift/add-shift.component';
 import { AddStaffComponent } from './admin-staff/add-staff/add-staff.component';
-import { CreateUpdateLocationComponent } from './admin-shifts/create-update-location/create-update-location.component';
-import { ViewLocationComponent, ShiftLocationSheetComponent } from './admin-shifts/view-location/view-location.component';
+import { CreateUpdateLocationComponent } from './admin-location/create-update-location/create-update-location.component';
+import { AdminLocationComponent, ShiftLocationSheetComponent } from './admin-location/admin-location.component';
 import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shift/view-shift.component';
 
 @NgModule({
@@ -28,11 +28,11 @@ import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shi
     AdminStaffComponent,
     AdminShiftsComponent,
     AdminProfileComponent,
+    AdminLocationComponent,
     AddShiftComponent,
     AddStaffComponent,
     CreateUpdateLocationComponent,
     ShiftLocationSheetComponent,
-    ViewLocationComponent,
     ViewShiftComponent,
     ShiftSheetComponent
   ],

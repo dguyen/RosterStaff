@@ -1,15 +1,15 @@
 import { Component, ViewChild, OnInit, Inject } from '@angular/core';
 import { MatTableDataSource, MatBottomSheetRef, MatBottomSheet, MatSort, MatDialog, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
-import { ShiftService, ShiftLocation } from '../../../_services/shift/shift.service';
-import { CreateUpdateLocationComponent } from '../create-update-location/create-update-location.component';
-import { ConfirmationComponent } from '../../../shared/components/confirmation/confirmation.component';
+import { ShiftService, ShiftLocation } from '../../_services/shift/shift.service';
+import { ConfirmationComponent } from '../../shared/components/confirmation/confirmation.component';
+import { CreateUpdateLocationComponent } from './create-update-location/create-update-location.component';
 
 @Component({
-  selector: 'app-view-location',
-  templateUrl: './view-location.component.html',
-  styleUrls: ['./view-location.component.scss']
+  selector: 'app-admin-location',
+  templateUrl: './admin-location.component.html',
+  styleUrls: ['./admin-location.component.scss']
 })
-export class ViewLocationComponent implements OnInit {
+export class AdminLocationComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource<ShiftLocation>();
   columnsToDisplay = ['description', 'address'];
