@@ -5,26 +5,28 @@
     </div>
     <h4 id="title">Roster.Me</h4>
     
-    <div id="formContainer">
+    <form [formGroup]="loginForm" id="formContainer" (ngSubmit)="login()">
       <mat-form-field>
-        <input type="email" matInput placeholder="Email" spellcheck=false [(ngModel)]="email" (keyup.enter)="login()">
-        <p class="errorMsg">{{ errorMsg.email }}</p>
+        <input matInput type="email" placeholder="Email" formControlName="email" spellcheck=false (keyup.enter)="login()">
+        <mat-error *ngIf="loginForm.get('email').hasError('required')">Email required</mat-error>
+        <mat-error *ngIf="loginForm.get('email').hasError('invalid')">Email is invalid. Check email and try again</mat-error>
+        <mat-error *ngIf="loginForm.get('email').hasError('notFound')">Email not found. Check email and try again</mat-error>
       </mat-form-field>
             
       <mat-form-field>
-        <input type="password" matInput placeholder="Password" [(ngModel)]="password" (keyup.enter)="login()">
-        <p class="errorMsg">{{ errorMsg.pass }}</p>
+        <input matInput type="password" placeholder="Password" formControlName="password" (keyup.enter)="login()">
+        <mat-error *ngIf="loginForm.get('password').hasError('required')">Password required</mat-error>
+        <mat-error *ngIf="loginForm.get('password').hasError('incorrect')">Incorrect Password</mat-error>
+        <mat-error *ngIf="loginForm.get('password').hasError('minlength')">Minimum length is 6</mat-error>
       </mat-form-field>
 
-      <mat-checkbox id="checkbox" [(ngModel)]="keepSignedIn">Keep me signed in</mat-checkbox>
+      <mat-checkbox id="checkbox" formControlName="keepSignedIn">Keep me signed in</mat-checkbox>
 
-      <p class="errorMsg">{{ errorMsg.unknown }}</p>
-      <button id="loginButton" mat-flat-button color="primary" (click)="login()" [disabled]="showLoading">
-        Login
+      <button id="loginButton" mat-flat-button color="primary" (click)="login()" [disabled]="showLoading">Login
         <mat-spinner id="spinner" mode="indeterminate" diameter=20 color="accent" *ngIf="showLoading"></mat-spinner>
       </button>
       
       <p id="forgotPassword" (click)="openResetPass()">Forgot password</p>
-    </div>
+    </form>
   </div>
 </div>

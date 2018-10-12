@@ -6,8 +6,6 @@ import { MaterialModule } from '../material.module';
 
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
-import { SelectOrganisationComponent } from './login/select-organisation/select-organisation.component';
-import { SelectPortalComponent } from './login/select-portal/select-portal.component';
 import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
@@ -21,14 +19,10 @@ import { MenuComponent } from './menu/menu.component';
   declarations: [
     LoginComponent,
     ForgotPasswordComponent,
-    SelectOrganisationComponent,
-    SelectPortalComponent,
     MenuComponent
   ],
   entryComponents: [
-    ForgotPasswordComponent,
-    SelectOrganisationComponent,
-    SelectPortalComponent
+    ForgotPasswordComponent
   ],
   exports: [
     MenuComponent,

@@ -17,13 +17,17 @@ export interface ShiftLocation {
 })
 export class ShiftService {
   private shiftObservable;
-  shiftRef = 'organisation/crystal-palace/shifts';
-  staffRef = 'organisation/crystal-palace/staff';
-  shiftLocRef = 'organisation/crystal-palace/locations';
+  shiftRef: string;
+  staffRef: string;
+  shiftLocRef: string;
   shifts = Array<Shift>();
   shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
 
   constructor(public userService: UserService, public fireDb: AngularFirestore) {
+    const currentOrg = this.userService.org.orgId;
+    this.shiftRef = 'organisation/' + currentOrg + '/shifts';
+    this.staffRef = 'organisation/' + currentOrg + '/staff';
+    this.shiftLocRef = 'organisation/' + currentOrg + '/locations';
     this.shiftListener();
   }
 

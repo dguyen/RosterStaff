@@ -8,7 +8,7 @@ import 'firebase/firestore';
 class Profile {
   firstName: '';
   lastName: '';
-  roles = [];
+  role: string;
   shifts = [];
   isLoaded = false;
 }
@@ -23,38 +23,30 @@ class Organisation {
   providedIn: 'root'
 })
 export class UserService {
+  dataStream = new Subject();
   profile = new Profile;
   org = new Organisation;
-  listOfOrgs = [];
-
   uid = '';
-  fireDb: any;
-  dataReady: any;
-  dataStream = new Subject();
 
-  constructor(private fireAuth: AngularFireAuth, fireDb: AngularFirestore) {
-    this.fireDb = fireDb;
-
+  constructor(private fireAuth: AngularFireAuth, private fireDb: AngularFirestore) {
     fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.uid = user.uid;
 
-        // Get organisations
+        // Get organisation and load user data
         fireDb.collection('users').doc(user.uid).valueChanges().subscribe((doc) => {
-          doc['organisations'].forEach(element => {
-            this.listOfOrgs.push(element.id);
-          });
-          this.org.isReady = true;
-          this.dataStream.next('orgLoaded');
-
-          // HARDCODED
-          this.loadUserData('crystal-palace');
+          if (doc['organisation'].id) {
+            this.loadUserData(doc['organisation'].id).then(() => {
+              this.org.isReady = true;
+            });
+          } else {
+            throw Error('User missing organisation data');
+          }
         });
       } else {
         // Reset data
         this.profile = new Profile;
         this.uid = '';
-        this.listOfOrgs = [];
         this.org = new Organisation;
       }
     });
@@ -66,27 +58,23 @@ export class UserService {
   getRoles() {
     return new Promise((resolve, reject) => {
       if (this.profile.isLoaded) {
-        resolve(this.profile.roles);
+        resolve(this.profile.role);
         return;
       }
       this.dataStream.subscribe((data) => {
         if (data === 'profileLoaded') {
-          resolve(this.profile.roles);
+          resolve(this.profile.role);
         }
       });
     });
   }
 
   /**
-   * Obtains the required data of a user based on a selected organisation.
+   * Obtains the required data of a user from their registered organisation.
    * @param organisation a string representing the id of an organisation
    */
   loadUserData(organisation: string) {
-    if (!this.listOfOrgs.includes(organisation)) {
-      return null;
-    }
-    this.dataReady = Promise.all([this.getOrgData(organisation), this.getProfile(organisation)]);
-    return this.dataReady;
+    return Promise.all([this.getOrgData(organisation), this.getProfile(organisation)]);
   }
 
   /**
@@ -95,9 +83,8 @@ export class UserService {
    */
   private getProfile(organisation: string) {
     const staffRef = 'organisation/' + organisation + '/staff';
-
     return new Promise((resolve, reject) => {
-      this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc) => {
+      this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
         this.profile = doc;
         this.profile.isLoaded = true;
         this.dataStream.next('profileLoaded');
@@ -113,11 +100,11 @@ export class UserService {
   private getOrgData(organisation: string) {
     return new Promise((resolve, reject) => {
       this.fireDb.collection('organisation').doc(organisation).valueChanges().subscribe((doc) => {
-        if (!doc.name) {
+        if (!doc['name']) {
           reject('Unable to find organisation');
         }
         this.org.orgId = organisation;
-        this.org.selectedOrg = doc.name;
+        this.org.selectedOrg = doc['name'];
         resolve();
       }, (err) => reject(err));
     });
