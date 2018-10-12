@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UserService } from '../user/user.service';
 import { Shift } from './shift';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
@@ -21,7 +21,7 @@ export class ShiftService {
   staffRef = 'organisation/crystal-palace/staff';
   shiftLocRef = 'organisation/crystal-palace/locations';
   shifts = Array<Shift>();
-  shiftStream = new Subject();
+  shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
 
   constructor(public userService: UserService, public fireDb: AngularFirestore) {
     this.shiftListener();

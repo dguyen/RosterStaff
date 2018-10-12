@@ -13,6 +13,7 @@ import { AddShiftComponent } from './admin-shifts/add-shift/add-shift.component'
 import { AddStaffComponent } from './admin-staff/add-staff/add-staff.component';
 import { CreateUpdateLocationComponent } from './admin-shifts/create-update-location/create-update-location.component';
 import { ViewLocationComponent, ShiftLocationSheetComponent } from './admin-shifts/view-location/view-location.component';
+import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shift/view-shift.component';
 
 @NgModule({
   imports: [
@@ -32,10 +33,13 @@ import { ViewLocationComponent, ShiftLocationSheetComponent } from './admin-shif
     CreateUpdateLocationComponent,
     ShiftLocationSheetComponent,
     ViewLocationComponent,
+    ViewShiftComponent,
+    ShiftSheetComponent
   ],
   entryComponents: [
     CreateUpdateLocationComponent,
-    ShiftLocationSheetComponent
+    ShiftLocationSheetComponent,
+    ShiftSheetComponent
   ]
 })
 export class AdminModule { }
