@@ -1,9 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import { MatBottomSheetRef, MatBottomSheet, MatDialog, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { ShiftService } from '../../../_services/shift/shift.service';
 import { ConfirmationComponent } from '../../../shared/components/confirmation/confirmation.component';
 import { Shift } from '../../../_services/shift/shift';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-view-shift',
@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./view-shift.component.scss']
 })
 export class ViewShiftComponent implements OnInit {
+  @Output() changeTab = new EventEmitter<any>();
   columnsToDisplay = ['location', 'date', 'start', 'end'];
   prettifiedColumns = {
     'location': 'Location',
@@ -18,10 +19,10 @@ export class ViewShiftComponent implements OnInit {
     'start': 'Start Time',
     'end': 'End Time'
   };
-  shiftStream: BehaviorSubject<Shift[]>;
+  shiftStream: Observable<{}[]>;
 
-  constructor(private shiftService: ShiftService, private bottomSheet: MatBottomSheet, private dialog: MatDialog) {
-    this.shiftStream = this.shiftService.shiftStream;
+  constructor(private shiftService: ShiftService, private bottomSheet: MatBottomSheet) {
+    this.shiftStream = this.shiftService.getAllShifts();
   }
 
   ngOnInit() {}
@@ -29,11 +30,21 @@ export class ViewShiftComponent implements OnInit {
   openBottomSheet(shift: Shift) {
     this.bottomSheet.open(ShiftSheetComponent, {
       data: shift
+    }).afterDismissed().subscribe((data) => {
+      if (data && data['action']) {
+        this.changeTab.emit({
+          type: data.action,
+          shift: shift
+        });
+      }
     });
   }
 
   addShift() {
-    // Todo: Swipe Mat-tab to add shift component
+    this.changeTab.emit({
+      type: 'add',
+      shift: null
+    });
   }
 }
 
@@ -44,10 +55,6 @@ export class ViewShiftComponent implements OnInit {
     <a mat-list-item (click)="showMoreDetails()">
       <mat-icon>poll</mat-icon>
       <span mat-line>Show Full Shift Details</span>
-    </a>
-    <a mat-list-item (click)="viewStaff()">
-      <mat-icon>people</mat-icon>
-      <span mat-line>View Rostered Staff</span>
     </a>
     <a mat-list-item (click)="editShift()">
       <mat-icon>edit</mat-icon>
@@ -70,18 +77,15 @@ export class ShiftSheetComponent {
   }
 
   showMoreDetails() {
-    // Todo
-    this.bottomSheetRef.dismiss();
-  }
-
-  viewStaff() {
-    // Todo
-    this.bottomSheetRef.dismiss();
+    this.bottomSheetRef.dismiss({
+      action: 'view'
+    });
   }
 
   editShift() {
-    // Todo
-    this.bottomSheetRef.dismiss();
+    this.bottomSheetRef.dismiss({
+      action: 'edit'
+    });
   }
 
   deleteShift() {

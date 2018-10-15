@@ -9,11 +9,12 @@ import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 import { AdminStaffComponent } from './admin-staff/admin-staff.component';
 import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
 import { AdminProfileComponent } from './admin-profile/admin-profile.component';
-import { AddShiftComponent } from './admin-shifts/add-shift/add-shift.component';
 import { AddStaffComponent } from './admin-staff/add-staff/add-staff.component';
 import { CreateUpdateLocationComponent } from './admin-location/create-update-location/create-update-location.component';
 import { AdminLocationComponent, ShiftLocationSheetComponent } from './admin-location/admin-location.component';
 import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shift/view-shift.component';
+import { AddUpdateViewShiftComponent } from './admin-shifts/add-update-view-shift/add-update-view-shift.component';
+import { RosterStaffTableComponent } from './admin-shifts/roster-staff-table/roster-staff-table.component';
 
 @NgModule({
   imports: [
@@ -29,12 +30,13 @@ import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shi
     AdminShiftsComponent,
     AdminProfileComponent,
     AdminLocationComponent,
-    AddShiftComponent,
     AddStaffComponent,
     CreateUpdateLocationComponent,
     ShiftLocationSheetComponent,
     ViewShiftComponent,
-    ShiftSheetComponent
+    ShiftSheetComponent,
+    AddUpdateViewShiftComponent,
+    RosterStaffTableComponent
   ],
   entryComponents: [
     CreateUpdateLocationComponent,
