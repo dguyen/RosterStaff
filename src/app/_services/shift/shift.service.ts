@@ -76,9 +76,7 @@ export class ShiftService {
       for (let i = 0; i < data['shifts'].length; i++) {
         data['shifts'][i].get().then((shiftData) => {
           if (shiftData.exists) {
-            const newShift = Object.assign(new Shift(), shiftData.data());
-            newShift.shiftId = shiftData.id;
-            tmp.push(newShift);
+            tmp.push(Object.assign(new Shift(), shiftData.data()));
           }
           if (data['shifts'].length <= i + 1) {
             this.shifts = tmp;
@@ -90,6 +88,13 @@ export class ShiftService {
   }
 
   /**
+   * Returns an observable that provides a stream of all shifts in an organisation
+   */
+  getAllShifts() {
+    return this.fireDb.collection(this.shiftRef).valueChanges();
+  }
+
+  /**
    * Create a new shift entry in the database
    * @param newShift a new shift entry to add to the database
    */
@@ -98,20 +103,39 @@ export class ShiftService {
 
     return new Promise((resolve, reject) => {
       if (!newShift.onDuty) { reject('onDuty property missing from Shift'); }
-
-      this.fireDb.collection(this.shiftRef).add(
-        Object.assign({}, newShift)
-      ).then((data) => {
+      const tmpShift = Object.assign({}, newShift);
+      tmpShift.shiftId = this.fireDb.createId();
+      this.fireDb.collection(this.shiftRef).doc(tmpShift.shiftId).set(tmpShift).then(() => {
         // Add a reference to the shift for all related staff
         for (const uid in newShift.onDuty) {
           if (newShift.onDuty.hasOwnProperty(uid)) {
             const staffRef = this.fireDb.firestore.collection(this.staffRef).doc(uid);
             batch.update(staffRef, {
-              shifts: firebase.firestore.FieldValue.arrayUnion(data)
+              shifts: firebase.firestore.FieldValue.arrayUnion(this.fireDb.collection(this.shiftRef).doc(tmpShift.shiftId).ref)
             });
           }
         }
         batch.commit().then(() => resolve()).catch((err) => reject(err));
+      }).catch((err) => reject(err));
+    });
+  }
+
+  /**
+   * Update a shift entry in the database
+   * @param updatedShift an updated shift entry
+   */
+  updateShift(updatedShift: Shift) {
+    // const batch = this.fireDb.firestore.batch();
+
+    return new Promise((resolve, reject) => {
+      if (!updatedShift.onDuty) { reject('onDuty property missing from Shift'); }
+
+      this.fireDb.collection(this.shiftRef).doc(updatedShift.shiftId).update(
+        Object.assign({}, updatedShift)
+      ).then((data) => {
+        resolve();
+        // Todo: Update rostered staff
+        // batch.commit().then(() => resolve()).catch((err) => reject(err));
       }).catch((err) => reject(err));
     });
   }

@@ -34,7 +34,7 @@ export class UserService {
         this.uid = user.uid;
 
         // Get organisation and load user data
-        fireDb.collection('users').doc(user.uid).valueChanges().subscribe((doc) => {
+        const toUnsub = fireDb.collection('users').doc(user.uid).valueChanges().subscribe((doc) => {
           if (doc['organisation'].id) {
             this.loadUserData(doc['organisation'].id).then(() => {
               this.org.isReady = true;
@@ -42,6 +42,7 @@ export class UserService {
           } else {
             throw Error('User missing organisation data');
           }
+          toUnsub.unsubscribe();
         });
       } else {
         // Reset data
@@ -84,11 +85,12 @@ export class UserService {
   private getProfile(organisation: string) {
     const staffRef = 'organisation/' + organisation + '/staff';
     return new Promise((resolve, reject) => {
-      this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
+      const toUnsub = this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
         this.profile = doc;
         this.profile.isLoaded = true;
         this.dataStream.next('profileLoaded');
         resolve();
+        toUnsub.unsubscribe();
       });
     });
   }
@@ -99,13 +101,14 @@ export class UserService {
    */
   private getOrgData(organisation: string) {
     return new Promise((resolve, reject) => {
-      this.fireDb.collection('organisation').doc(organisation).valueChanges().subscribe((doc) => {
+      const toUnsub = this.fireDb.collection('organisation').doc(organisation).valueChanges().subscribe((doc) => {
         if (!doc['name']) {
           reject('Unable to find organisation');
         }
         this.org.orgId = organisation;
         this.org.selectedOrg = doc['name'];
         resolve();
+        toUnsub.unsubscribe();
       }, (err) => reject(err));
     });
   }
