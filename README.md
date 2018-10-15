@@ -2,23 +2,19 @@
 
 An online rostering system built using the Angular 6 framework.
 
-## Current progress
-- Currently working on staff portal
-- Admin portal development has not been started yet
-
 ## Getting Started
 
 Two demo accounts currently avaliable
 ```
 Username: admin@root.com
 Password: password
-Note: Has access to both admin and staff dashboard
+Note: Has access to admin portal
 ```
 
 ```
 Username: client@root.com
 Password: password
-Note: Has access to staff dashboard
+Note: Has access to staff portal
 ```
 
 ### Prerequisites
