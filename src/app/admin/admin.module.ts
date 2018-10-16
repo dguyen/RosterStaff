@@ -15,6 +15,7 @@ import { AdminLocationComponent, ShiftLocationSheetComponent } from './admin-loc
 import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shift/view-shift.component';
 import { AddUpdateViewShiftComponent } from './admin-shifts/add-update-view-shift/add-update-view-shift.component';
 import { RosterStaffTableComponent } from './admin-shifts/roster-staff-table/roster-staff-table.component';
+import { ViewStaffComponent, StaffSheetComponent } from './admin-staff/view-staff/view-staff.component';
 
 @NgModule({
   imports: [
@@ -36,12 +37,15 @@ import { RosterStaffTableComponent } from './admin-shifts/roster-staff-table/ros
     ViewShiftComponent,
     ShiftSheetComponent,
     AddUpdateViewShiftComponent,
-    RosterStaffTableComponent
+    RosterStaffTableComponent,
+    StaffSheetComponent,
+    ViewStaffComponent
   ],
   entryComponents: [
     CreateUpdateLocationComponent,
     ShiftLocationSheetComponent,
-    ShiftSheetComponent
+    ShiftSheetComponent,
+    StaffSheetComponent
   ]
 })
 export class AdminModule { }

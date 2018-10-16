@@ -1,15 +1,71 @@
 import { Component, OnInit } from '@angular/core';
+import { Staff } from 'src/app/_services/staff/staff';
+import { FormControl } from '@angular/forms';
+import { MatTabChangeEvent } from '@angular/material';
 
+const typeOfTab = {
+  edit: {
+    title: 'Update Staff Member',
+    type: 'edit'
+  },
+  view: {
+    title: 'View Staff Member',
+    type: 'view'
+  },
+  add: {
+    title: 'Add Staff',
+    type: 'add'
+  }
+};
 @Component({
   selector: 'app-admin-staff',
   templateUrl: './admin-staff.component.html',
   styleUrls: ['./admin-staff.component.scss']
 })
 export class AdminStaffComponent implements OnInit {
-
+  newTab: any;
+  selectedStaff: Staff;
+  selected = new FormControl(0);
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  /**
+   * Allows the user to dynamically change the tabs
+   */
+  changeTab(eventData: any) {
+    if (!eventData || !typeOfTab[eventData['type']]) {
+      throw Error('Invalid parameter');
+    }
+    if (eventData.type === 'add') {
+      this.selected.setValue(0);
+      return;
+    }
+    this.loadTab(eventData.type, eventData.staff);
   }
 
+  /**
+   * Load a new tab which will allow the user to either edit, view or modify a staff instance
+   * @param tabType type of tab which must one of the following strings ['edit', 'view', 'add']
+   * @param staff a staff to pass into the new tab
+   */
+  loadTab(tabType: string, staff: Staff) {
+    if (!typeOfTab[tabType]) {
+      throw Error('Parameter must be either edit, view or add');
+    }
+    this.newTab = typeOfTab[tabType];
+    this.selectedStaff = staff;
+    this.selected.setValue(2);
+  }
+
+  /**
+   * Automatically closes the new tab when user navigates away
+   * @param event tab change event
+   */
+  tabChanged(event: MatTabChangeEvent) {
+    this.selected.setValue(event.index);
+    if (this.selected.value !== 2) {
+      this.newTab = null;
+    }
+  }
 }
