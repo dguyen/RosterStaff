@@ -1,5 +1,5 @@
-import { Component, ViewChild, OnInit, Inject } from '@angular/core';
-import { MatTableDataSource, MatBottomSheetRef, MatBottomSheet, MatSort, MatDialog, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatBottomSheetRef, MatBottomSheet, MatDialog, MAT_BOTTOM_SHEET_DATA } from '@angular/material';
 import { ShiftService, ShiftLocation } from '../../_services/shift/shift.service';
 import { ConfirmationComponent } from '../../shared/components/confirmation/confirmation.component';
 import { CreateUpdateLocationComponent } from './create-update-location/create-update-location.component';
@@ -10,30 +10,23 @@ import { CreateUpdateLocationComponent } from './create-update-location/create-u
   styleUrls: ['./admin-location.component.scss']
 })
 export class AdminLocationComponent implements OnInit {
-  @ViewChild(MatSort) sort: MatSort;
-  dataSource = new MatTableDataSource<ShiftLocation>();
   columnsToDisplay = ['description', 'address'];
-  isLoading = true;
+  prettifiedColumns = {
+    description: 'Description',
+    address: 'Address'
+  };
+  locationStream: any;
 
   constructor(private shiftService: ShiftService, private bottomSheet: MatBottomSheet, private dialog: MatDialog) {
-    this.shiftService.getShiftLocations().subscribe((locations: ShiftLocation[]) => {
-      this.dataSource.data = locations;
-      this.isLoading = false;
-    });
+    this.locationStream = this.shiftService.getShiftLocations();
   }
 
-  ngOnInit() {
-    this.dataSource.sort = this.sort;
-  }
+  ngOnInit() {}
 
   openBottomSheet(location: ShiftLocation): void {
     this.bottomSheet.open(ShiftLocationSheetComponent, {
       data: location
     });
-  }
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   addLocation() {

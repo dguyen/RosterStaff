@@ -1,13 +1,13 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-table-list',
   templateUrl: './table-list.component.html',
   styleUrls: ['./table-list.component.scss']
 })
-export class TableListComponent implements OnInit {
+export class TableListComponent implements OnInit, OnDestroy {
   @Input() inputStream: BehaviorSubject<any>;
   @Input() columnsToDisplay: Array<string>;
   @Input() prettifiedColumns: Object;
@@ -15,6 +15,7 @@ export class TableListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource<any>();
   isLoading = true;
+  streamRef: Subscription;
 
   constructor() {}
 
@@ -29,10 +30,14 @@ export class TableListComponent implements OnInit {
     };
 
     this.dataSource.sort = this.sort;
-    this.inputStream.subscribe((tableData: any) => {
+    this.streamRef = this.inputStream.subscribe((tableData: any) => {
       this.dataSource.data = tableData;
       this.isLoading = false;
     });
+  }
+
+  ngOnDestroy() {
+    this.streamRef.unsubscribe();
   }
 
   /**
