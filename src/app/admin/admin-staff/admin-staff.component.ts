@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Staff } from 'src/app/_services/staff/staff';
 import { FormControl } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material';
+import { Staff } from 'src/app/_services/staff/staff.service';
 
 const typeOfTab = {
   edit: {

@@ -22,7 +22,9 @@ export class ViewShiftComponent implements OnInit {
   shiftStream: Observable<{}[]>;
 
   constructor(private shiftService: ShiftService, private bottomSheet: MatBottomSheet) {
-    this.shiftStream = this.shiftService.getAllShifts();
+    this.shiftService.getAllShifts().then((data: Observable<{}[]>) => {
+      this.shiftStream = data;
+    });
   }
 
   ngOnInit() {}

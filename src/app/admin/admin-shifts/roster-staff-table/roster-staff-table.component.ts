@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { Staff } from '../../../_services/staff/staff';
+import { StaffService, Staff } from '../../../_services/staff/staff.service';
 import { Subscription } from 'rxjs';
-import { StaffService } from '../../../_services/staff/staff.service';
 
 @Component({
   selector: 'app-roster-staff-table',

@@ -3,7 +3,16 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserService } from '../user/user.service';
 import { BehaviorSubject } from 'rxjs';
-import { Staff } from './staff';
+
+export class Staff {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
+  shifts: string[];
+  phoneNum: number;
+  email: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +27,13 @@ export class StaffService {
   constructor(public userService: UserService, public fireDb: AngularFirestore, public fireAuth: AngularFireAuth) {
     fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
-        // Todo: Replace with listener (async)
-        if (userService.org.isReady) {
-          this.organisation = userService.org.orgId;
+        this.userService.getOrganisation().then((org) => {
+          this.organisation = org['orgId'];
           this.staffRef = 'organisation/' + this.organisation + '/staff';
           this.staffListener();
-        }
+        });
       } else {
+        this.staffStream = new BehaviorSubject<Staff[]>(this.staffMembers);
         this.staffObservable.unsubscribe();
         this.organisation = null;
         this.staffMembers = null;

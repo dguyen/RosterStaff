@@ -10,7 +10,7 @@ class Profile {
   lastName: '';
   role: string;
   shifts = [];
-  isLoaded = false;
+  isReady = false;
 }
 
 class Organisation {
@@ -38,6 +38,7 @@ export class UserService {
           if (doc['organisation'].id) {
             this.loadUserData(doc['organisation'].id).then(() => {
               this.org.isReady = true;
+              this.dataStream.next('orgLoaded');
             });
           } else {
             throw Error('User missing organisation data');
@@ -54,17 +55,38 @@ export class UserService {
   }
 
   /**
+   * Returns a promise that resolves with the organisation
+   */
+  getOrganisation() {
+    return new Promise((resolve) => {
+      if (this.org.isReady) {
+        resolve(this.org);
+        return;
+      }
+      const tmp = this.dataStream.subscribe((stream) => {
+        if (stream === 'orgLoaded') {
+          resolve(this.org);
+          tmp.unsubscribe();
+          return;
+        }
+      });
+    });
+  }
+
+  /**
    * Returns a promise that resolves with the user's roles
    */
   getRoles() {
-    return new Promise((resolve, reject) => {
-      if (this.profile.isLoaded) {
+    return new Promise((resolve) => {
+      if (this.profile.isReady) {
         resolve(this.profile.role);
         return;
       }
-      this.dataStream.subscribe((data) => {
+      const tmp = this.dataStream.subscribe((data) => {
         if (data === 'profileLoaded') {
           resolve(this.profile.role);
+          tmp.unsubscribe();
+          return;
         }
       });
     });
@@ -87,7 +109,7 @@ export class UserService {
     return new Promise((resolve, reject) => {
       const toUnsub = this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
         this.profile = doc;
-        this.profile.isLoaded = true;
+        this.profile.isReady = true;
         this.dataStream.next('profileLoaded');
         resolve();
         toUnsub.unsubscribe();
@@ -137,6 +159,17 @@ export class UserService {
       }).catch((err) => {
         reject(err);
       });
+    });
+  }
+
+  /**
+   * Retrieve the logged in user's id token
+   */
+  getIdToken() {
+    return new Promise((resolve, reject) => {
+      firebase.auth().currentUser.getIdToken(true).then((idToken) => {
+        resolve(idToken);
+      }).catch((err) => reject(err));
     });
   }
 }

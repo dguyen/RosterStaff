@@ -1,8 +1,7 @@
 import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
 import { MatBottomSheet, MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef, MatDialog } from '@angular/material';
 import { ConfirmationComponent } from 'src/app/shared/components/confirmation/confirmation.component';
-import { StaffService } from 'src/app/_services/staff/staff.service';
-import { Staff } from 'src/app/_services/staff/staff';
+import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
 import { Observable } from 'rxjs';
 
 @Component({

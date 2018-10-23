@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Staff } from 'src/app/_services/staff/staff';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { StaffService } from 'src/app/_services/staff/staff.service';
+import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 
 const typeOfActions = {

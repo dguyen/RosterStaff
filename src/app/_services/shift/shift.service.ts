@@ -24,11 +24,25 @@ export class ShiftService {
   shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
 
   constructor(public userService: UserService, public fireDb: AngularFirestore) {
-    const currentOrg = this.userService.org.orgId;
-    this.shiftRef = 'organisation/' + currentOrg + '/shifts';
-    this.staffRef = 'organisation/' + currentOrg + '/staff';
-    this.shiftLocRef = 'organisation/' + currentOrg + '/locations';
-    this.shiftListener();
+    this.setupService();
+    firebase.auth().onAuthStateChanged((user) => {
+      user ? this.setupService() : this.clearService();
+    });
+  }
+
+  private setupService() {
+    this.userService.getOrganisation().then((org) => {
+      this.shiftRef = 'organisation/' + org['orgId'] + '/shifts';
+      this.staffRef = 'organisation/' + org['orgId'] + '/staff';
+      this.shiftLocRef = 'organisation/' + org['orgId'] + '/locations';
+      this.shiftListener();
+    });
+  }
+
+  private clearService() {
+    this.shifts = Array<Shift>();
+    this.shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
+    this.shiftObservable.unsubscribe();
   }
 
   /**
@@ -88,10 +102,14 @@ export class ShiftService {
   }
 
   /**
-   * Returns an observable that provides a stream of all shifts in an organisation
+   * Returns a promise that resolves with an observable that provides a stream of all shifts in an organisation
    */
   getAllShifts() {
-    return this.fireDb.collection(this.shiftRef).valueChanges();
+    return new Promise((resolve) => {
+      this.userService.getOrganisation().then((org) => {
+        resolve(this.fireDb.collection('organisation/' + org['orgId'] + '/shifts').valueChanges());
+      });
+    });
   }
 
   /**
