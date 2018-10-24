@@ -88,13 +88,10 @@ export class AddUpdateViewShiftComponent implements OnInit, OnDestroy, AfterView
 
   loadLocations() {
     let init = false;
-    this.shiftLocObs = this.shiftService.getShiftLocations().subscribe((locations) => {
+    this.shiftLocObs = this.shiftService.locationStream.subscribe((locations: Location[]) => {
+      if (!locations) { return; }
       this.isLoading.location = false;
-      locations.forEach(location => {
-        if (!this.locations.includes(location)) {
-          this.locations.push(location);
-        }
-      });
+      this.locations = locations;
       if (this.inputShift && !init) {
         const index = this.locations.findIndex((x) => x.description === this.inputShift.location.description);
         if (index < 0) {

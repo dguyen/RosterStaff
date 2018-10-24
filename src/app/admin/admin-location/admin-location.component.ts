@@ -3,6 +3,7 @@ import { MatBottomSheetRef, MatBottomSheet, MatDialog, MAT_BOTTOM_SHEET_DATA } f
 import { ShiftService, ShiftLocation } from '../../_services/shift/shift.service';
 import { ConfirmationComponent } from '../../shared/components/confirmation/confirmation.component';
 import { CreateUpdateLocationComponent } from './create-update-location/create-update-location.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-admin-location',
@@ -15,10 +16,10 @@ export class AdminLocationComponent implements OnInit {
     description: 'Description',
     address: 'Address'
   };
-  locationStream: any;
+  locationStream: BehaviorSubject<Location[]>;
 
   constructor(private shiftService: ShiftService, private bottomSheet: MatBottomSheet, private dialog: MatDialog) {
-    this.locationStream = this.shiftService.getShiftLocations();
+    this.locationStream = this.shiftService.locationStream;
   }
 
   ngOnInit() {}

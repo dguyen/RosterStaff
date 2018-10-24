@@ -22,7 +22,9 @@ export class StaffPortalComponent {
 
   setupListeners() {
     this.shiftService.shiftStream.subscribe((shifts: Shift[]) => {
-      this.updateShiftBadge(shifts);
+      if (shifts) {
+        this.updateShiftBadge(shifts);
+      }
     });
   }
 

@@ -31,8 +31,10 @@ export class TableListComponent implements OnInit, OnDestroy {
 
     this.dataSource.sort = this.sort;
     this.streamRef = this.inputStream.subscribe((tableData: any) => {
-      this.dataSource.data = tableData;
-      this.isLoading = false;
+      if (tableData) {
+        this.dataSource.data = tableData;
+        this.isLoading = false;
+      }
     });
   }
 

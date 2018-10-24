@@ -22,7 +22,9 @@ export class ShiftsComponent implements OnInit, OnDestroy {
 
     // Subscribe to shift updates
     this.shiftStream = this.shiftService.shiftStream.subscribe((shifts: Shift[]) => {
-      this.updateShifts(shifts);
+      if (shifts) {
+        this.updateShifts(shifts);
+      }
     });
   }
 

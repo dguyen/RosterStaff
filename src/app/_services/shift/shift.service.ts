@@ -17,11 +17,14 @@ export interface ShiftLocation {
 })
 export class ShiftService {
   private shiftObservable;
+  private locationObservable;
   shiftRef: string;
   staffRef: string;
   shiftLocRef: string;
   shifts = Array<Shift>();
-  shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
+  shiftStream = new BehaviorSubject<Shift[]>(null); // Only streams shifts relating to the signed in user
+  locations = Array<Location>();
+  locationStream = new BehaviorSubject<Location[]>(null);
 
   constructor(public userService: UserService, public fireDb: AngularFirestore) {
     this.setupService();
@@ -32,24 +35,44 @@ export class ShiftService {
 
   private setupService() {
     this.userService.getOrganisation().then((org) => {
+      this.clearService();
       this.shiftRef = 'organisation/' + org['orgId'] + '/shifts';
       this.staffRef = 'organisation/' + org['orgId'] + '/staff';
       this.shiftLocRef = 'organisation/' + org['orgId'] + '/locations';
       this.shiftListener();
+      this.locationListener();
     });
   }
 
   private clearService() {
     this.shifts = Array<Shift>();
-    this.shiftStream = new BehaviorSubject<Shift[]>(this.shifts);
-    this.shiftObservable.unsubscribe();
+    this.locations = Array<Location>();
+    this.shiftStream.next(null);
+    this.locationStream.next(null);
+    if (this.shiftObservable) {
+      this.shiftObservable.unsubscribe();
+    }
+    if (this.locationObservable) {
+      this.locationObservable.unsubscribe();
+    }
   }
 
   /**
-   * Get an observable that obtains all locations related to the selected organisation
+   * Returns a promise that obtains all locations related to the selected organisation
    */
   getShiftLocations() {
-    return this.fireDb.collection(this.shiftLocRef).valueChanges();
+    return new Promise((resolve) => {
+      if (this.locations) {
+        resolve(this.locations);
+        return;
+      }
+      const stream = this.locationStream.subscribe((locations: Location[]) => {
+        if (stream) {
+          resolve(locations);
+          stream.unsubscribe();
+        }
+      });
+    });
   }
 
   /**
@@ -98,6 +121,12 @@ export class ShiftService {
           }
         });
       }
+    });
+  }
+
+  private locationListener() {
+    this.locationObservable = this.fireDb.collection(this.shiftLocRef).valueChanges().subscribe((locations: Location[]) => {
+      this.locationStream.next(locations);
     });
   }
 
