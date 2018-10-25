@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MenuService } from '../../_services/menu/menu.service';
 import { ShiftService } from '../../_services/shift/shift.service';
-
 import { StaffMenuItems } from '../staff-menu-items';
 import { Shift } from '../../_services/shift/shift';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-staff-portal',
   template: `<app-menu></app-menu>`
 })
-export class StaffPortalComponent {
+export class StaffPortalComponent implements OnDestroy  {
+  private streamSub: Subscription;
 
   constructor(private menuService: MenuService, private shiftService: ShiftService) {
     this.menuService.loadMenu(StaffMenuItems);
@@ -20,8 +21,12 @@ export class StaffPortalComponent {
     this.setupListeners();
   }
 
+  ngOnDestroy() {
+    if (this.streamSub) { this.streamSub.unsubscribe(); }
+  }
+
   setupListeners() {
-    this.shiftService.shiftStream.subscribe((shifts: Shift[]) => {
+    this.streamSub = this.shiftService.shiftStream.subscribe((shifts: Shift[]) => {
       if (shifts) {
         this.updateShiftBadge(shifts);
       }

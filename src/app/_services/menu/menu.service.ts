@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { MenuItem } from './menu-item';
 import { Subject } from 'rxjs';
 
@@ -9,10 +8,14 @@ import { Subject } from 'rxjs';
 export class MenuService {
   menuItems: Array<MenuItem>;
   menuUpdate = new Subject();
-  menuSideOpened = true;
+  menuSideOpened = !this.detectMob();
 
   constructor() {}
 
+  /**
+   * Load a new menu into the service
+   * @param menuItems an array of menu items to display
+   */
   loadMenu(menuItems: Array<MenuItem>) {
     this.menuItems = menuItems;
     this.menuUpdate.next();
@@ -73,5 +76,12 @@ export class MenuService {
       }
     }
     return totalNotifications;
+  }
+
+  /**
+   * Detects if the window width is small
+   */
+  private detectMob() {
+    return window.innerWidth <= 1000;
   }
 }

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuService } from '../../_services/menu/menu.service';
 import { UserService } from '../../_services/user/user.service';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-menu',
@@ -11,7 +12,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
   styleUrls: ['./menu.component.scss']
 })
 
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   menuItems: any;
   opened: boolean;
   companyName = 'Company';
@@ -20,11 +21,9 @@ export class MenuComponent implements OnInit {
       private router: Router,
       private fireAuth: AngularFireAuth,
       private userService: UserService,
-      private menuService: MenuService
+      private menuService: MenuService,
+      private snackBar: MatSnackBar
   ) {
-    // Todo: Opened = true on desktop, Opened = false on mobile.
-    this.opened = true;
-
     // Listener for menu service changes
     if (this.menuService.menuItems != null) { this.updateMenu(); }
     this.menuService.menuUpdate.subscribe(() => this.updateMenu());
@@ -34,15 +33,19 @@ export class MenuComponent implements OnInit {
     this.opened = this.menuService.menuSideOpened;
   }
 
+  ngOnDestroy() {
+    this.menuService.menuSideOpened = this.opened;
+  }
+
   updateMenu() {
     this.menuItems = this.menuService.menuItems;
   }
 
   logout() {
-    this.fireAuth.auth.signOut().then((data) => {
+    this.fireAuth.auth.signOut().then(() => {
       this.router.navigate(['']);
-    }).catch((err) => {
-      // Todo: Indicate to user that signout was unsuccessful
+    }).catch(() => {
+      this.snackBar.open('An error occured during signout, please check your network connection and try again', null, { duration: 10000 });
     });
   }
 
