@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 
@@ -31,12 +31,13 @@ export class AddUpdateViewStaffComponent implements OnInit {
   @Input() inputStaff: Staff;
   selectedOperation: any;
   maxDate = new Date();
+  isLoading = false;
   staffForm = new FormGroup({
-    'firstName': new FormControl('', Validators.required),
-    'lastName': new FormControl('', Validators.required),
+    'firstName': new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    'lastName': new FormControl('', [Validators.required, Validators.maxLength(50)]),
     'dob': new FormControl(''), // Todo: Add date validator
-    'email': new FormControl('', [Validators.required]),
-    'phoneNum': new FormControl(''), // Todo: Add phone number validator
+    'email': new FormControl('', [Validators.required, regexValidator(/.+\@.+\..+/)]),
+    'phoneNum': new FormControl('', [Validators.minLength(6), Validators.maxLength(15), regexValidator(/^[0-9]*$/)]),
     'address': new FormControl('', Validators.maxLength(300))
   });
 
@@ -79,7 +80,22 @@ export class AddUpdateViewStaffComponent implements OnInit {
    */
   createStaff() {
     if (this.staffForm.invalid) { return; }
-    // Todo
+    this.isLoading = true;
+    const tmpStaff = Object.assign(new Staff, this.staffForm.value);
+    tmpStaff['role'] = 'STAFF'; // Todo remove hardcode
+    this.staffService.createStaff(tmpStaff).then(() => {
+      this.isLoading = false;
+      this.snackBar.open('New staff successfully created', null, { duration: 5000 });
+    }).catch((err) => {
+      this.isLoading = false;
+      if (err.code === 'already-exists') {
+        this.staffForm.get('email').setErrors( { 'email-taken': true });
+        return;
+      } else {
+        this.snackBar.open('Something went wrong during the account creation of ' + tmpStaff.firstName + ' ' + tmpStaff.lastName +
+        '. Please try again later', null, { duration: 10000 });
+      }
+    });
   }
 
   /**
@@ -89,4 +105,11 @@ export class AddUpdateViewStaffComponent implements OnInit {
     if (this.staffForm.invalid) { return; }
     // Todo
   }
+}
+
+export function regexValidator(nameRe: RegExp): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    const forbidden = !nameRe.test(control.value);
+    return forbidden ? {'invalidFormat': {value: control.value}} : null;
+  };
 }

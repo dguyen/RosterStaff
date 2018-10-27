@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireFunctions } from 'angularfire2/functions';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { UserService } from '../user/user.service';
 import { BehaviorSubject } from 'rxjs';
@@ -8,7 +9,7 @@ export class Staff {
   uid: string;
   firstName: string;
   lastName: string;
-  roles: string[];
+  role: string;
   shifts: string[];
   phoneNum: number;
   email: string;
@@ -24,7 +25,12 @@ export class StaffService {
   staffMembers: Staff[];
   staffStream = new BehaviorSubject<Staff[]>(this.staffMembers);
 
-  constructor(public userService: UserService, public fireDb: AngularFirestore, public fireAuth: AngularFireAuth) {
+  constructor(
+    public userService: UserService,
+    public fireDb: AngularFirestore,
+    public fireAuth: AngularFireAuth,
+    private fireFunc: AngularFireFunctions
+  ) {
     fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.userService.getOrganisation().then((org) => {
@@ -90,19 +96,21 @@ export class StaffService {
   }
 
   /**
-   * Create a new staff member
+   * Create a new staff member in the same organisation as the logged in user
+   * Returns a promise that resolves if a new staff member is successfully created, rejects otherwise
    * @param newStaff a staff member to be created
    */
   createStaff(newStaff: Staff) {
-    // Todo: Required to use firebase functions and admin sdk for security reasons
+    return this.fireFunc.httpsCallable('createStaff')(newStaff).toPromise();
   }
 
   /**
-   * Delete a staff member from the organisation
+   * Delete a staff member in the same organisation as the logged in user
+   * Returns a promise that resolves when the staff member is deleted from the organisation or rejects when an error occurs
    * @param delStaff a staff member to be deleted
    */
-  deleteStaff(delStaff: Staff) {
-    // Todo: Required to use firebase functions and admin sdk for security reasons
+  deleteStaff(staffUid: string) {
+    return this.fireFunc.httpsCallable('deleteStaff')({ uid: staffUid }).toPromise();
   }
 
   /**

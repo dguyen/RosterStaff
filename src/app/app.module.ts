@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireFunctionsModule } from 'angularfire2/functions';
 
 import { environment } from '../environments/environment';
 import { CoreModule } from './core/core.module';
@@ -23,6 +24,7 @@ import { AppComponent } from './app.component';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireFunctionsModule,
     BrowserAnimationsModule
   ],
   providers: [ ],

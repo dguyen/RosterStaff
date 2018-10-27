@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, EventEmitter, Output } from '@angular/core';
-import { MatBottomSheet, MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef, MatDialog } from '@angular/material';
+import { MatBottomSheet, MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef, MatDialog, MatSnackBar } from '@angular/material';
 import { ConfirmationComponent } from 'src/app/shared/components/confirmation/confirmation.component';
 import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
 import { Observable } from 'rxjs';
@@ -71,7 +71,8 @@ export class StaffSheetComponent {
     @Inject(MAT_BOTTOM_SHEET_DATA) public staff: Staff,
     private bottomSheetRef: MatBottomSheetRef<StaffSheetComponent>,
     private dialog: MatDialog,
-    private staffService: StaffService
+    private staffService: StaffService,
+    private snackbar: MatSnackBar
   ) {
   }
 
@@ -95,7 +96,23 @@ export class StaffSheetComponent {
 
     confirmDialog.afterClosed().subscribe((data) => {
       if (data) {
-        this.staffService.deleteStaff(this.staff);
+        this.staffService.deleteStaff(this.staff.uid).then(() => {
+          this.snackbar.open('Successfully deleted ' + this.staff.firstName + '\'s account', null, { duration: 5000 });
+        }).catch((err) => {
+          if (err.code === 'invalid-argument') {
+            if (err.message === 'You cannot delete your own account') {
+              this.snackbar.open('You cannot delete your own account!', null, { duration: 5000 });
+            } else {
+              this.snackbar.open('Staff member could not be deleted. Please contact support.', null, { duration: 5000 });
+            }
+          } else if (err.code === 'not-found') {
+            this.snackbar.open('Staff member ' + this.staff.firstName + ' has already been deleted', null, { duration: 5000 });
+          } else if (err.code === 'permission-denied') {
+            this.snackbar.open('You do not have permission to delete this account', null, { duration: 5000 });
+          } else {
+            this.snackbar.open('Something went wrong during deletion of staff. Please contact support.' , null, { duration: 5000 });
+          }
+        });
       }
       this.bottomSheetRef.dismiss();
     });
