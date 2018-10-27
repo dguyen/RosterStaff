@@ -20,8 +20,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(
       private router: Router,
       private fireAuth: AngularFireAuth,
-      private userService: UserService,
-      private menuService: MenuService,
+      public userService: UserService,
+      public menuService: MenuService,
       private snackBar: MatSnackBar
   ) {
     // Listener for menu service changes
