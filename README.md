@@ -2,7 +2,10 @@
 
 An online rostering system built using the Angular 6 framework.
 
-## Getting Started
+## Demo
+A sample build hosted on firebase's hosting service. Please note that this build may not necessarily be up to date, and not all functionality has been implemented yet.
+
+https://rosterstaff-d7906.firebaseapp.com
 
 Two demo accounts currently avaliable
 ```
