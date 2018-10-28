@@ -43,7 +43,11 @@ export class LoginComponent implements OnInit {
     this.showLoading = true;
 
     this.userService.getRoles().then((role: string) => {
-      role ? this.router.navigate([role.toLowerCase()]) : this.throwErrorMessage();
+      if (role === 'ADMIN' || role === 'MANAGER') {
+        this.router.navigate(['admin']);
+      } else {
+        this.router.navigate(['staff']);
+      }
     }).catch((err) => {
       this.showLoading = false;
       this.throwErrorMessage();

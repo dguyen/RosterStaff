@@ -17,7 +17,7 @@ const routes: Routes = [
     component: AdminPortalComponent,
     canActivate: [ AuthGuard, RoleGuard ],
     canActivateChild: [ AuthGuard, RoleGuard ],
-    data: { roles: ['ADMIN'] },
+    data: { roles: ['ADMIN', 'MANAGER'] },
     children: [
       {
         path: 'dashboard',

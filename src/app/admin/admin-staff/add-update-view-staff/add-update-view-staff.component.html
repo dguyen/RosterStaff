@@ -59,6 +59,18 @@
             </mat-error>
           </mat-form-field>
         </div>
+
+        <div class="col-2">
+            <mat-form-field>
+              <mat-select required=true placeholder="Role" formControlName="role">
+                <mat-option *ngFor="let role of possibleRoles" [value]="role">
+                  {{ upperFirstChar(role) }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="staffForm.get('role').hasError('required')">Role required</mat-error>
+              <mat-error *ngIf="staffForm.get('role').hasError('invalid')">Invalid role</mat-error>
+            </mat-form-field>
+          </div>
       </div>
 
       <div class="row">

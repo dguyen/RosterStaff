@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
+import { UserService  } from 'src/app/_services/user/user.service';
 
 const typeOfActions = {
   edit: {
@@ -32,9 +33,11 @@ export class AddUpdateViewStaffComponent implements OnInit {
   selectedOperation: any;
   maxDate = new Date();
   isLoading = false;
+  possibleRoles = ['STAFF'];
   staffForm = new FormGroup({
     'firstName': new FormControl('', [Validators.required, Validators.maxLength(50)]),
     'lastName': new FormControl('', [Validators.required, Validators.maxLength(50)]),
+    'role': new FormControl('STAFF', [Validators.required]),
     'dob': new FormControl(''), // Todo: Add date validator
     'email': new FormControl('', [Validators.required, regexValidator(/.+\@.+\..+/)]),
     'phoneNum': new FormControl('', [Validators.minLength(6), Validators.maxLength(15), regexValidator(/^[0-9]*$/)]),
@@ -43,9 +46,17 @@ export class AddUpdateViewStaffComponent implements OnInit {
 
   constructor(
     private staffService: StaffService,
-    private snackBar: MatSnackBar,
-    private dialog: MatDialog
-  ) { }
+    private userService: UserService,
+    private snackBar: MatSnackBar
+  ) {
+    this.userService.getRoles().then((role) => {
+      if (role === 'ADMIN') {
+        this.possibleRoles = ['STAFF', 'MANAGER', 'ADMIN'];
+      } else if (role === 'MANAGER') {
+        this.possibleRoles = ['STAFF', 'MANAGER'];
+      }
+    });
+  }
 
   ngOnInit() {
     if (!Object.keys(typeOfActions).includes(this.type)) {
@@ -82,14 +93,16 @@ export class AddUpdateViewStaffComponent implements OnInit {
     if (this.staffForm.invalid) { return; }
     this.isLoading = true;
     const tmpStaff = Object.assign(new Staff, this.staffForm.value);
-    tmpStaff['role'] = 'STAFF'; // Todo remove hardcode
     this.staffService.createStaff(tmpStaff).then(() => {
       this.isLoading = false;
-      this.snackBar.open('New staff successfully created', null, { duration: 5000 });
+      this.snackBar.open('Successfully created new staff', null, { duration: 5000 });
     }).catch((err) => {
       this.isLoading = false;
       if (err.code === 'already-exists') {
-        this.staffForm.get('email').setErrors( { 'email-taken': true });
+        this.staffForm.get('email').setErrors({ 'email-taken': true });
+        return;
+      } else if (err.code === 'invalid-argument') {
+        this.staffForm.get('role').setErrors({ 'invalid': true });
         return;
       } else {
         this.snackBar.open('Something went wrong during the account creation of ' + tmpStaff.firstName + ' ' + tmpStaff.lastName +
@@ -104,6 +117,14 @@ export class AddUpdateViewStaffComponent implements OnInit {
   editStaff() {
     if (this.staffForm.invalid) { return; }
     // Todo
+  }
+
+  /**
+   * Takes a string and makes the first letter uppercase and the rest lowercase
+   * @param item a string to convert
+   */
+  private upperFirstChar(item: string) {
+    return item.toLowerCase().charAt(0).toUpperCase() + item.slice(1).toLowerCase();
   }
 }
 
