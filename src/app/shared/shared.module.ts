@@ -7,6 +7,7 @@ import { ConfirmationComponent } from './components/confirmation/confirmation.co
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TableListComponent } from './components/table-list/table-list.component';
 import { UpdateViewProfileComponent } from './components/update-view-profile/update-view-profile.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { UpdateViewProfileComponent } from './components/update-view-profile/upd
     ResetPasswordComponent,
     TableListComponent,
     UpdateViewProfileComponent,
+    ProfileComponent,
   ],
   exports: [
     ResetPasswordComponent,

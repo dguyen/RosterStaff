@@ -7,7 +7,7 @@ import { RoleGuard } from '../_guards/role.guard';
 import { StaffPortalComponent } from './staff-portal/staff-portal.component';
 import { ShiftsComponent } from './shifts/shifts.component';
 import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
-import { StaffProfileComponent } from './staff-profile/staff-profile.component';
+import { ProfileComponent } from '../shared/components/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: StaffProfileComponent,
+        component: ProfileComponent,
       },
       {
         path: '**',

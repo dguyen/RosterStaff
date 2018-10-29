@@ -5,8 +5,8 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
 import { AdminStaffComponent } from './admin-staff/admin-staff.component';
-import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { AdminLocationComponent } from './admin-location/admin-location.component';
+import { ProfileComponent } from '../shared/components/profile/profile.component';
 
 import { AuthGuard } from '../_guards/auth.guard';
 import { RoleGuard } from '../_guards/role.guard';
@@ -37,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        component: AdminProfileComponent
+        component: ProfileComponent
       },
       {
         path: '**',

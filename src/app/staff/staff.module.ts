@@ -7,7 +7,6 @@ import { SharedModule } from '../shared/shared.module';
 
 import { StaffDashboardComponent } from './staff-dashboard/staff-dashboard.component';
 import { ShiftsComponent } from './shifts/shifts.component';
-import { StaffProfileComponent } from './staff-profile/staff-profile.component';
 import { ShiftViewComponent } from './shifts/shift-view/shift-view.component';
 import { CalendarComponent } from './shifts/shift-view/calendar/calendar.component';
 import { ListComponent } from './shifts/shift-view/list/list.component';
@@ -23,7 +22,6 @@ import { StaffPortalComponent } from './staff-portal/staff-portal.component';
   declarations: [
     StaffDashboardComponent,
     ShiftsComponent,
-    StaffProfileComponent,
     StaffPortalComponent,
     ShiftViewComponent,
     CalendarComponent,

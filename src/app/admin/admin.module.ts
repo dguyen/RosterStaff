@@ -8,7 +8,6 @@ import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.compo
 import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 import { AdminStaffComponent } from './admin-staff/admin-staff.component';
 import { AdminShiftsComponent } from './admin-shifts/admin-shifts.component';
-import { AdminProfileComponent } from './admin-profile/admin-profile.component';
 import { CreateUpdateLocationComponent } from './admin-location/create-update-location/create-update-location.component';
 import { AdminLocationComponent, ShiftLocationSheetComponent } from './admin-location/admin-location.component';
 import { ViewShiftComponent, ShiftSheetComponent } from './admin-shifts/view-shift/view-shift.component';
@@ -29,7 +28,6 @@ import { AddUpdateViewStaffComponent } from './admin-staff/add-update-view-staff
     AdminPortalComponent,
     AdminStaffComponent,
     AdminShiftsComponent,
-    AdminProfileComponent,
     AdminLocationComponent,
     CreateUpdateLocationComponent,
     ShiftLocationSheetComponent,
