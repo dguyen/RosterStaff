@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
 class Profile {
   firstName: '';
   lastName: '';
+  email: '';
+  phoneNum: '';
   role: string;
+  address = '';
   shifts = [];
   isReady = false;
 }
@@ -25,6 +28,7 @@ class Organisation {
 export class UserService {
   dataStream = new Subject();
   profile = new Profile;
+  profileSubscription: Subscription;
   org = new Organisation;
   uid = '';
 
@@ -50,8 +54,23 @@ export class UserService {
         this.profile = new Profile;
         this.uid = '';
         this.org = new Organisation;
+        if (this.profileSubscription) {
+          this.profileSubscription.unsubscribe();
+        }
       }
     });
+  }
+
+  /**
+   * Update the signed in user's profile
+   * @param updatedProfile the updated profile
+   */
+  updateProfile(updatedProfile: Profile) {
+    if (!this.profile.isReady) {
+      throw Error('Service is not yet configured');
+    }
+    // Todo: Replace with firebase function for security reasons
+    return this.fireDb.collection('organisation/' + this.org.orgId + '/staff').doc(this.uid).update(updatedProfile);
   }
 
   /**
@@ -107,12 +126,11 @@ export class UserService {
   private getProfile(organisation: string) {
     const staffRef = 'organisation/' + organisation + '/staff';
     return new Promise((resolve, reject) => {
-      const toUnsub = this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
+      this.profileSubscription = this.fireDb.collection(staffRef).doc(this.uid).valueChanges().subscribe((doc: Profile) => {
         this.profile = doc;
         this.profile.isReady = true;
         this.dataStream.next('profileLoaded');
         resolve();
-        toUnsub.unsubscribe();
       });
     });
   }

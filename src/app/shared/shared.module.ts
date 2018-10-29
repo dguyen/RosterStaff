@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { TableListComponent } from './components/table-list/table-list.component';
+import { UpdateViewProfileComponent } from './components/update-view-profile/update-view-profile.component';
 
 @NgModule({
   imports: [
@@ -17,11 +18,13 @@ import { TableListComponent } from './components/table-list/table-list.component
   declarations: [
     ConfirmationComponent,
     ResetPasswordComponent,
-    TableListComponent
+    TableListComponent,
+    UpdateViewProfileComponent,
   ],
   exports: [
     ResetPasswordComponent,
-    TableListComponent
+    TableListComponent,
+    UpdateViewProfileComponent,
   ],
   entryComponents: [ConfirmationComponent]
 })
