@@ -120,6 +120,9 @@ export class StaffService {
   updateStaff(updatedStaff: Staff) {
     if (!updatedStaff) { return; }
     const objStaff = Object.assign({}, updatedStaff);
-    return this.fireDb.collection(this.staffRef).doc(updatedStaff.uid).update(objStaff);
+    if (objStaff.email) {
+      delete objStaff.email;
+    }
+    return this.fireDb.collection(this.staffRef).doc(objStaff.uid).update(objStaff);
   }
 }

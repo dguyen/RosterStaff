@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { StaffService, Staff } from 'src/app/_services/staff/staff.service';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { UserService  } from 'src/app/_services/user/user.service';
 
 const typeOfActions = {
@@ -72,6 +72,9 @@ export class AddUpdateViewStaffComponent implements OnInit {
   loadInputStaff() {
     if (this.type === 'add') { return; }
     if (!this.inputStaff) { throw Error('Input staff required if operation is view or update'); }
+    if (this.selectedOperation.type === 'edit') {
+      this.staffForm.get('email').disable();
+    }
     this.staffForm.patchValue(this.inputStaff);
   }
 
@@ -116,7 +119,15 @@ export class AddUpdateViewStaffComponent implements OnInit {
    */
   editStaff() {
     if (this.staffForm.invalid) { return; }
-    // Todo
+    this.isLoading = true;
+    this.staffForm.value.uid = this.inputStaff.uid;
+    this.staffService.updateStaff(this.staffForm.value).then(() => {
+      this.snackBar.open('Successfully updated staff', null, { duration: 4000 });
+      this.isLoading = false;
+    }).catch(() => {
+      this.snackBar.open('Something went wrong during update, please try again later', null, { duration: 5000 });
+      this.isLoading = false;
+    });
   }
 
   /**
