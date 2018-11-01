@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Subject, Subscription } from 'rxjs';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
@@ -32,7 +33,7 @@ export class UserService {
   org = new Organisation;
   uid = '';
 
-  constructor(private fireAuth: AngularFireAuth, private fireDb: AngularFirestore) {
+  constructor(private fireAuth: AngularFireAuth, private fireDb: AngularFirestore, private fireStg: AngularFireStorage) {
     fireAuth.auth.onAuthStateChanged((user) => {
       if (user) {
         this.uid = user.uid;
@@ -181,13 +182,41 @@ export class UserService {
   }
 
   /**
-   * Retrieve the logged in user's id token
+   * Update the logged in user's profile picture
+   * @param picture an image file to upload
    */
-  getIdToken() {
+  updateProfilePicture(picture: File) {
+    if (!this.fireAuth.auth.currentUser) {
+      throw new Error('User not signed in');
+    }
     return new Promise((resolve, reject) => {
-      firebase.auth().currentUser.getIdToken(true).then((idToken) => {
-        resolve(idToken);
-      }).catch((err) => reject(err));
+      if (picture.size >= 3000000) {
+        reject('storage/max_file_size');
+      }
+
+      const user = this.fireAuth.auth.currentUser.uid;
+      this.fireStg.ref(user + '/profile/picture').put(picture).then((data) => {
+        if (data.state !== 'success') {
+          reject();
+        }
+        data.ref.getDownloadURL().then((url) => {
+          this.fireAuth.auth.currentUser.updateProfile({
+            displayName: '',
+            photoURL: url
+          }).then(() => resolve()).catch((err) => reject(err.code));
+        });
+      }).catch((err) => reject(err.code));
     });
+  }
+
+  /**
+   * Returns the url of the user's profile picture if exists, otherwise returns null
+   */
+  getProfilePicture() {
+    const user = this.fireAuth.auth.currentUser;
+    if (!user) {
+      throw new Error('User is not signed in yet');
+    }
+    return user.photoURL ? user.photoURL : null;
   }
 }
