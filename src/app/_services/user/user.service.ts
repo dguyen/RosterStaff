@@ -190,14 +190,16 @@ export class UserService {
       throw new Error('User not signed in');
     }
     return new Promise((resolve, reject) => {
-      if (picture.size >= 3000000) {
+      if (picture.size >= 3 * 1024 * 1024) {
         reject('storage/max_file_size');
+        return;
       }
 
       const user = this.fireAuth.auth.currentUser.uid;
       this.fireStg.ref(user + '/profile/picture').put(picture).then((data) => {
         if (data.state !== 'success') {
           reject();
+          return;
         }
         data.ref.getDownloadURL().then((url) => {
           this.fireAuth.auth.currentUser.updateProfile({
@@ -206,6 +208,35 @@ export class UserService {
           }).then(() => resolve()).catch((err) => reject(err.code));
         });
       }).catch((err) => reject(err.code));
+    });
+  }
+
+  /**
+   * Delete user's profile picture
+   */
+  deleteProfilePicture() {
+    if (!this.fireAuth.auth.currentUser) {
+      throw new Error('User not signed in');
+    }
+    return new Promise((resolve, reject) => {
+      if (!this.fireAuth.auth.currentUser.photoURL) {
+        resolve();
+        return;
+      }
+      const user = this.fireAuth.auth.currentUser.uid;
+      const deletePromise = new Promise((resolveDelete) => {
+        this.fireStg.ref(user + '/profile/picture').delete().toPromise().then(() => {
+          resolveDelete();
+        }).catch(() => resolveDelete());
+      });
+      const updateUrlPromise = this.fireAuth.auth.currentUser.updateProfile({
+        displayName: '',
+        photoURL: null
+      });
+
+      Promise.all([deletePromise, updateUrlPromise]).then(() => {
+        resolve();
+      }).catch((err) => reject(err));
     });
   }
 
