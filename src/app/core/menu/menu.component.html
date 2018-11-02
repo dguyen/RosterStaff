@@ -9,10 +9,11 @@
           </mat-icon>
         </button>
         <div id="toolbarProfile" *ngIf="!opened">
-          <button mat-icon-button>
-            <mat-icon id="menu">{{ getProfilePicture() }}</mat-icon>
+            <div id="imageContainer">
+              <mat-icon *ngIf="!imageUrl || imageError">account_circle</mat-icon>
+              <img *ngIf="imageUrl && !imageError" [src]="imageUrl" (error)="imageError = true">
+            </div>
             <span>{{ getName() }}</span>
-          </button>
         </div>
       </mat-toolbar>
 
@@ -41,7 +42,10 @@
         <div class="sideNavFooter">
           <mat-divider class="divider"></mat-divider>
           <a mat-list-item>
-            <mat-icon>{{ getProfilePicture() }}</mat-icon>
+            <div id="imageContainer">
+              <mat-icon *ngIf="!imageUrl || imageError">account_circle</mat-icon>
+              <img *ngIf="imageUrl && !imageError" [src]="imageUrl" (error)="imageError = true">
+            </div>
             {{ getName() }}
           </a>
         </div>

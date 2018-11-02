@@ -16,6 +16,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   menuItems: any;
   opened: boolean;
   companyName = 'Company';
+  imageError = false;
+  imageUrl: string;
 
   constructor(
       private router: Router,
@@ -31,6 +33,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.opened = this.menuService.menuSideOpened;
+    this.refreshProfilePicture();
   }
 
   ngOnDestroy() {
@@ -39,6 +42,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   updateMenu() {
     this.menuItems = this.menuService.menuItems;
+    this.refreshProfilePicture();
   }
 
   logout() {
@@ -49,11 +53,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     });
   }
 
-  getProfilePicture() {
-    const image = null;
-    // Todo: Get image from database
-
-    return image ? image : 'account_circle';
+  refreshProfilePicture() {
+    this.imageUrl = this.userService.getProfilePicture();
   }
 
   getName() {

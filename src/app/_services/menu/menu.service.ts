@@ -79,6 +79,13 @@ export class MenuService {
   }
 
   /**
+   * Refresh the menu
+   */
+  refreshMenu() {
+    this.menuUpdate.next();
+  }
+
+  /**
    * Detects if the window width is small
    */
   private detectMob() {
