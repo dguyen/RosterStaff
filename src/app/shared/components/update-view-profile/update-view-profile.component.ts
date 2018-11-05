@@ -13,6 +13,7 @@ export class UpdateViewProfileComponent implements OnInit {
   @ViewChild('file') file;
   maxDate = new Date();
   isLoading = false;
+  dpIsLoading = false;
   profileDpUrl: string;
   profileForm = new FormGroup({
     'firstName': new FormControl('', [Validators.required, Validators.maxLength(50)]),
@@ -67,10 +68,13 @@ export class UpdateViewProfileComponent implements OnInit {
    * Delete current display picture if exists
    */
   deletePicture() {
+    this.dpIsLoading = true;
     this.userService.deleteProfilePicture().then(() => {
+      this.dpIsLoading = false;
       this.snackBar.open('Successfully removed display photo', null, { duration: 4000 });
       this.refreshPicture();
     }).catch(() => {
+      this.dpIsLoading = false;
       this.snackBar.open('Something went wrong, please try again later', null, { duration: 4000 });
     });
   }
@@ -80,11 +84,14 @@ export class UpdateViewProfileComponent implements OnInit {
    */
   uploadPicture() {
     const newPicture = this.file.nativeElement.files[0];
-    if (newPicture) {
+    if (newPicture && !this.dpIsLoading) {
+      this.dpIsLoading = true;
       this.userService.updateProfilePicture(newPicture).then(() => {
         this.snackBar.open('Successfully updated profile picture!', null, { duration: 4000 });
         this.refreshPicture();
+        this.dpIsLoading = false;
       }).catch((err) => {
+        this.dpIsLoading = false;
         if (err === 'storage/max_file_size') {
           this.snackBar.open('File exceeds 3MB limit, and therefore could not be uploaded', null, { duration: 5000 });
           return;

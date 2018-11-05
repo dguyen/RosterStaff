@@ -40,6 +40,23 @@
   backface-visibility: hidden;
 }
 
+.visibleOverlay {
+  transition: .5s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+}
+
+.lessOpacity {
+  opacity: 0.5;
+}
+
+.maxOpacity {
+  opacity: 1 !important;
+}
+
 .overlay {
   border-radius: 50%;
   transition: .5s ease;
