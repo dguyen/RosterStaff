@@ -40,7 +40,7 @@ export class AdminShiftsComponent implements OnInit {
       throw Error('Invalid parameter');
     }
     if (eventData.type === 'add') {
-      this.selected.setValue(0);
+      this.selected.setValue(1);
       return;
     }
     this.loadTab(eventData.type, eventData.shift);
