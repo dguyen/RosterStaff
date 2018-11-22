@@ -8,12 +8,12 @@
             menu
           </mat-icon>
         </button>
-        <div id="toolbarProfile" *ngIf="!opened">
-            <div id="imageContainer">
-              <mat-icon *ngIf="!imageUrl || imageError">account_circle</mat-icon>
-              <img *ngIf="imageUrl && !imageError" [src]="imageUrl" (error)="imageError = true">
-            </div>
-            <span>{{ getName() }}</span>
+        <div id="toolbarProfile" [ngStyle]="{'opacity': opened ? '1': '0'}">
+          <div id="imageContainer">
+            <mat-icon *ngIf="!imageUrl || imageError">account_circle</mat-icon>
+            <img *ngIf="imageUrl && !imageError" [src]="imageUrl" (error)="imageError = true">
+          </div>
+          <span>{{ getName() }}</span>
         </div>
       </mat-toolbar>
 
