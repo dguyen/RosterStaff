@@ -266,5 +266,30 @@ export class ShiftService {
       });
     });
   }
+
+  /**
+   * Filter a list of shifts into pending, upcoming and total categories
+   * @param shifts a list of shifts to filter
+   */
+  filterShifts(shifts: Shift[]) {
+    if (!shifts) { return; }
+    const pendingShifts = new Array<Shift>();
+    const upcomingShifts = new Array<Shift>();
+    const uid = this.userService.uid;
+    shifts.forEach(aShift => {
+      const status = aShift.getStatus(uid);
+      if (status == null && !aShift.hasStarted()) {
+        pendingShifts.push(aShift);
+      } else if (status && !aShift.hasPassed()) {
+        upcomingShifts.push(aShift);
+      }
+    });
+
+    return {
+      pending: pendingShifts,
+      upcoming: upcomingShifts,
+      total: shifts.slice()
+    };
+  }
 }
 

@@ -35,20 +35,9 @@ export class ShiftsComponent implements OnInit, OnDestroy {
   }
 
   updateShifts(data: Shift[]) {
-    const pendingShifts = new Array<Shift>();
-    const currentShifts = new Array<Shift>();
-    const uid = this.shiftService.userService.uid;
-    data.forEach(aShift => {
-      const status = aShift.getStatus(uid);
-      if (status == null && !aShift.hasStarted()) {
-        pendingShifts.push(aShift);
-      } else if (status && !aShift.hasPassed()) {
-        currentShifts.push(aShift);
-      }
-    });
-
-    this.shiftHistoryStream.next(data);
-    this.pendingShiftStream.next(pendingShifts);
-    this.currentShiftStream.next(currentShifts);
+    const filteredShifts = this.shiftService.filterShifts(data);
+    this.shiftHistoryStream.next(filteredShifts['total']);
+    this.pendingShiftStream.next(filteredShifts['pending']);
+    this.currentShiftStream.next(filteredShifts['upcoming']);
   }
 }
