@@ -11,6 +11,7 @@ import { ShiftViewComponent } from './shifts/shift-view/shift-view.component';
 import { CalendarComponent } from './shifts/shift-view/calendar/calendar.component';
 import { ListComponent } from './shifts/shift-view/list/list.component';
 import { StaffPortalComponent } from './staff-portal/staff-portal.component';
+import { ShiftDashboardCardComponent } from './staff-dashboard/shift-dashboard-card/shift-dashboard-card.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { StaffPortalComponent } from './staff-portal/staff-portal.component';
     StaffPortalComponent,
     ShiftViewComponent,
     CalendarComponent,
-    ListComponent
+    ListComponent,
+    ShiftDashboardCardComponent
   ]
 })
 export class StaffModule { }
